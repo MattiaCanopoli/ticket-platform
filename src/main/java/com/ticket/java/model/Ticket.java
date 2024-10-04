@@ -1,5 +1,6 @@
 package com.ticket.java.model;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -22,12 +23,13 @@ public class Ticket {
 
 	@NotNull
 	@NotEmpty
+	@Column(name = "title", nullable = false)
 	private String title;
 
 	@NotNull
 	@NotEmpty
-	@Column(columnDefinition = "TEXT")
-	private String text;
+	@Column(name = "content", columnDefinition = "TEXT", nullable = false)
+	private String content;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
@@ -39,6 +41,9 @@ public class Ticket {
 	@ManyToOne
 	@JoinColumn(name = "category_id", nullable = false)
 	private Category category;
+
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
 
 	// getter & setter
 
@@ -58,12 +63,12 @@ public class Ticket {
 		this.title = title;
 	}
 
-	public String getText() {
-		return text;
+	public String getContent() {
+		return content;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public User getUser() {
@@ -88,6 +93,14 @@ public class Ticket {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
 	}
 
 }
