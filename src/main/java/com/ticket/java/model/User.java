@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -32,9 +33,16 @@ public class User {
 	@NotNull
 	@NotEmpty
 	@Column(name = "email")
+	// TODO inserire constraint per unique
 	private String email;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<Role> roles;
+
+	@OneToMany(mappedBy = "user")
+	private Set<Ticket> tickets;
+
+	@OneToMany(mappedBy = "author")
+	private Set<Note> notes;
 
 }
