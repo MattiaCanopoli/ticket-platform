@@ -1,32 +1,93 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
+
 <head>
-<th:block th:replace="~{fragments/fragments :: head}"></th:block>
-    <title>New Ticket</title>
+	<th:block th:replace="~{fragments/fragments :: head}"></th:block>
+	<title>New Ticket</title>
 </head>
-<body>
-    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
-    <main class="container">
-        <div class="mb-3">
-            <label for="ticket-title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="ticket-title" placeholder="Title">
-          </div>
-          <div class="mb-3">
-            <label for="ticket-content" class="form-label">Describe the problem</label>
-            <textarea class="form-control" id="ticket-content" rows="3"></textarea>
-          </div>
-          <div class="form-check">
-            <div th:each="category : ${categories}">
-          <input class="form-check-input" type="checkbox" th:value="${category.id}" th:id="'category-' + ${category.id}" th:field="${ticket.category}">
-          <label class="form-check-label" for="'category-' + ${category.id}">
-            [[${category.name}]]
-          </label>
-          </div>
-        </div>
-        
-    </main>
+
+<body class="blue-background">
+	<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+	<main class="container">
+		<div class="row justify-content-center mb-5">
+			<div class="col-lg-6 text-center">
+				<h2>Ask ACME!</h2>
+			</div>
+		</div>
+		<div class="row mb-5 justify-content-center">
+			<div class="col-lg-6">
+				<form method="post" th:object="${ticket}" th:action="@{/create}">
+					<!--tiket-title-->
+					<div class="mb-3">
+						<label for="title" class="form-label">Title</label>
+						<input type="text" class="form-control" id="title" placeholder="Title" th:field="*{title}"
+							th:errorclass="is-invalid">
+						<!--tiket-title errors-->
+						<div th:if="${#fields.hasErrors('title')}" class="invalid-feedback">
+							<ul>
+								<li th:each="err: ${#fields.errors('title')}" th:text="${err}"></li>
+							</ul>
+						</div>
+					</div>
+
+					<!--tiket-content-->
+					<div class="mb-3">
+						<label for="content" class="form-label">Describe the problem</label>
+						<textarea class="form-control" id="content" rows="5" th:field="*{content}"
+							th:errorclass="is-invalid"></textarea>
+						<div th:if="${#fields.hasErrors('content')}" class="invalid-feedback">
+							<ul>
+								<li th:each="err: ${#fields.errors('content')}" th:text="${err}"></li>
+							</ul>
+						</div>
+					</div>
+					<!--tiket-content errors-->
+
+					<div class="row mb-3">
+						<!--ticket-category-->
+						<div class="col-6">
+							<select class="form-select" aria-label="Default select example" th:field="*{category}"
+								id="category" th:errorclass="is-invalid">
+								<option selected value="">Select Priority</option>
+								<option th:each="category : ${categories}" th:value="${category.id}">
+									[[${category.name}]]
+								</option>
+							</select>
+							<!--ticket-category error-->
+							<div th:if="${#fields.hasErrors('category')}" class="invalid-feedback">
+								<ul>
+									<li th:each="err: ${#fields.errors('category')}" th:text="${err}"></li>
+								</ul>
+							</div>
+						</div>
+						<!--ticket-user-->
+						<div class="col-6">
+							<select class="form-select" aria-label="Default select example" th:field="*{user}" id="user"
+								th:errorclass="is-invalid">
+								<option selected value="">Select Operator</option>
+								<option th:each="user : ${users}" th:value="${user.id}">
+									[[${user.name}]]</option>
+							</select>
+							<!--ticket-category error-->
+							<div th:if="${#fields.hasErrors('user')}" class="invalid-feedback">
+								<ul>
+									<li th:each="err: ${#fields.errors('user')}" th:text="${err}"></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="d-flex justify-content-end">
+						<button class="btn btn-success mx-2 border border-1 border-light" type="submit">Submit</button>
+						<button class="btn btn-warning mx-2 border border-1 border-light" type="reset">Reset</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+	</main>
 
 
-    <script th:replace="~{fragments/fragments :: scripts}"></script>
+	<script th:replace="~{fragments/fragments :: scripts}"></script>
 </body>
+
 </html>
