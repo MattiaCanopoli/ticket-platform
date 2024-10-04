@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+<th:block th:replace="~{fragments/fragments :: head}"></th:block>
+    <title>New Ticket</title>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <main class="container">
+        <div class="mb-3">
+            <label for="ticket-title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="ticket-title" placeholder="Title">
+          </div>
+          <div class="mb-3">
+            <label for="ticket-content" class="form-label">Describe the problem</label>
+            <textarea class="form-control" id="ticket-content" rows="3"></textarea>
+          </div>
+          <div class="form-check">
+            <div th:each="category : ${categories}">
+          <input class="form-check-input" type="checkbox" th:value="${category.id}" th:id="'category-' + ${category.id}" th:field="${ticket.category}">
+          <label class="form-check-label" for="'category-' + ${category.id}">
+            [[${category.name}]]
+          </label>
+          </div>
+        </div>
+        
+    </main>
+
+
+    <script th:replace="~{fragments/fragments :: scripts}"></script>
+</body>
+</html>
