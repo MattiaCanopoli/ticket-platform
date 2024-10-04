@@ -5,13 +5,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ticket.java.model.Ticket;
 import com.ticket.java.service.CategoryService;
 import com.ticket.java.service.TicketService;
+import com.ticket.java.service.UserService;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/")
@@ -22,6 +28,9 @@ public class TicketController {
 
 	@Autowired
 	CategoryService cService;
+
+	@Autowired
+	UserService uService;
 
 	@GetMapping
 	public String index(Model model, @RequestParam(name = "title", required = false) String title) {
@@ -43,6 +52,19 @@ public class TicketController {
 	public String create(Model model) {
 		model.addAttribute("ticket", new Ticket());
 		model.addAttribute("categories", cService.findAll());
+		model.addAttribute("users", uService.findAll());
 		return "/tickets/create";
+	}
+
+	@PostMapping("/create")
+	public String store(@Valid @ModelAttribute("ticket") Ticket ticket, Model model, BindingResult bindingResult) {
+
+		if (bindingResult.hasErrors()) {
+			return "/tickets/create";
+		}
+
+		tService.save(ticket);
+
+		return "redirect:/";
 	}
 }
