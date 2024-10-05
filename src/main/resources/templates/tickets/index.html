@@ -7,7 +7,7 @@
 	<title>ACME Support</title>
 </head>
 
-<body class="blue-background">
+<body class="bg-primary-subtle">
 	<th:block th:replace="~{fragments/navbar :: navbar}"></th:block>
 
 	<main class="container">
@@ -29,7 +29,9 @@
 				<tr th:each="ticket : ${tickets}">
 					<td>[[${ticket.id}]]</td>
 					<td>[[${ticket.priority}]]</td>
-					<td>[[${ticket.title}]]</td>
+					<td>
+						<a th:href="@{/{id}(id=${ticket.id})}">[[${ticket.title}]]</a>
+					</td>
 					<td>status placeholder</td>
 					<td>[[${ticket.user.name}]]</td>
 					<td>[[${ticket.formattedCreatedAt}]]</td>
@@ -37,7 +39,7 @@
 				</tr>
 			</tbody>
 		</table>
-		
+
 		<div th:unless="${tickets.size()>0}">
 			<h2 class="text-center">No Tickets</h2>
 		</div>
