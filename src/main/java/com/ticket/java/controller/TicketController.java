@@ -63,6 +63,7 @@ public class TicketController {
 	@PostMapping("/create")
 	public String store(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model) {
 
+		ticket.setStatus("open");
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("users", uService.findAll());
 			return "/tickets/create";

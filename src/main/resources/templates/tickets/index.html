@@ -32,7 +32,7 @@
 					<td>
 						<a th:href="@{/{id}(id=${ticket.id})}">[[${ticket.title}]]</a>
 					</td>
-					<td>status placeholder</td>
+					<td>[[${ticket.status.toUpperCase()}]]</td>
 					<td>[[${ticket.user.name}]]</td>
 					<td>[[${ticket.formattedCreatedAt}]]</td>
 					<td>[[${ticket.formattedUpdatedAt}]]</td>
