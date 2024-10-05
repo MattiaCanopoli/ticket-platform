@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ticket.java.model.Ticket;
-import com.ticket.java.service.CategoryService;
 import com.ticket.java.service.TicketService;
 import com.ticket.java.service.UserService;
 
@@ -25,9 +24,6 @@ public class TicketController {
 
 	@Autowired
 	TicketService tService;
-
-	@Autowired
-	CategoryService cService;
 
 	@Autowired
 	UserService uService;
@@ -51,7 +47,6 @@ public class TicketController {
 	@GetMapping("/create")
 	public String create(Model model) {
 		model.addAttribute("ticket", new Ticket());
-		model.addAttribute("categories", cService.findAll());
 		model.addAttribute("users", uService.findAll());
 		return "/tickets/create";
 	}
@@ -60,7 +55,6 @@ public class TicketController {
 	public String store(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model) {
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("categories", cService.findAll());
 			model.addAttribute("users", uService.findAll());
 			return "/tickets/create";
 		}
