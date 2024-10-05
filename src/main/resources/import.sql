@@ -2,4 +2,3 @@ INSERT INTO user (email, name, password) VALUES ('mattia.canopoli@ticket.com','m
 INSERT INTO role (role_name) VALUES ('ADMIN'),('USER');
 INSERT INTO user_roles (user_id, roles_id) VALUES (1,1),(2,2),(3,2),(4,1);
 INSERT INTO category (name) VALUES ('not urgent'),('urgent'),('blocking')
-
