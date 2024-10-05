@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+
+<head>
+	<th:block th:replace="~{fragments/fragments :: head}"></th:block>
+	<title>[[${ticket.title}]]</title>
+</head>
+
+<body class="bg-primary-subtle">
+	<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+	<main class="container" th:object="${ticket}">
+		<div class="row justify-content-center">
+			<div class="col-lg-6">
+				<h2 class="text-center mb-3">[[*{title}]]</h2>
+				<div class="row mb-2 fs-6 text justyfy-content-evenly text-center border border-primary rounded blue-background">
+					<div class="col-12 col-md-6">
+						<span class="fw-medium">Priority</span>
+						<span class="fw-semibold fst-italic">[[*{priority}]]</span>
+					</div>
+					<div class="col-12 col-md-6">
+						<span class="fw-medium">User</span>
+						<span class="fw-semibold fst-italic">[[*{user.name}]]</span>
+					</div>
+				</div>
+				<div class="row fs-5 border border-primary rounded text-center justify-content-center blue-background">
+					<div class="col-12 col-md-6">
+						<div>[[*{content}]]</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script th:replace="~{fragments/fragments :: scripts}"></script>
+</body>
+
+</html>
