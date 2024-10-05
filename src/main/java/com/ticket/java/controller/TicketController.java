@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +43,14 @@ public class TicketController {
 		model.addAttribute("tickets", tickets);
 
 		return "tickets/index";
+	}
+
+	@GetMapping("/{id}")
+	public String show(@PathVariable("id") Integer id, Model model) {
+
+		model.addAttribute("ticket", tService.getById(id));
+
+		return "tickets/show";
 	}
 
 	@GetMapping("/create")
