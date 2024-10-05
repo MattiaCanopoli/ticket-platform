@@ -45,9 +45,8 @@ public class Ticket {
 	private Set<Note> notes;
 
 	@NotNull
-	@ManyToOne
-	@JoinColumn(name = "category_id", nullable = false)
-	private Category category;
+	@NotEmpty
+	private String priority;
 
 	@CreationTimestamp
 	@Column(name = "created_at")
@@ -102,14 +101,6 @@ public class Ticket {
 		this.notes = notes;
 	}
 
-	public Category getCategory() {
-		return category;
-	}
-
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
@@ -132,6 +123,14 @@ public class Ticket {
 
 	public String getFormattedUpdatedAt() {
 		return this.createdAt.format(formatter);
+	}
+
+	public String getPriority() {
+		return priority;
+	}
+
+	public void setPriority(String priority) {
+		this.priority = priority;
 	}
 
 }
