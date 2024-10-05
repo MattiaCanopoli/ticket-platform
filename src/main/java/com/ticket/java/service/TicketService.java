@@ -1,6 +1,5 @@
 package com.ticket.java.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ public class TicketService {
 	}
 
 	public Ticket save(Ticket ticket) {
-		ticket.setCreatedAt(LocalDateTime.now());
 		return tRepo.save(ticket);
 
 	}
