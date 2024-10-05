@@ -20,9 +20,8 @@
 					<!--tiket-title-->
 					<div class="mb-3">
 						<label for="title" class="form-label">Title</label>
-						<input type="text" class="form-control" id="title" placeholder="Title" th:field="*{title}"
-							th:errorclass="is-invalid">
-						<!--tiket-title errors-->
+						<input type="text" class="form-control" id="title" th:field="*{title}" th:errorClass="is-invalid">
+						<!-- title errors-->
 						<div th:if="${#fields.hasErrors('title')}" class="invalid-feedback">
 							<ul>
 								<li th:each="err: ${#fields.errors('title')}" th:text="${err}"></li>
@@ -35,13 +34,13 @@
 						<label for="content" class="form-label">Describe the problem</label>
 						<textarea class="form-control" id="content" rows="5" th:field="*{content}"
 							th:errorclass="is-invalid"></textarea>
-						<div th:if="${#fields.hasErrors('content')}" class="invalid-feedback">
-							<ul>
-								<li th:each="err: ${#fields.errors('content')}" th:text="${err}"></li>
-							</ul>
-						</div>
+							<!-- content errors-->
+							<div th:if="${#fields.hasErrors('content')}" class="invalid-feedback">
+								<ul>
+									<li th:each="err: ${#fields.errors('content')}" th:text="${err}"></li>
+								</ul>
+							</div>
 					</div>
-					<!--tiket-content errors-->
 
 					<div class="row mb-3">
 						<!--ticket-category-->
@@ -53,7 +52,7 @@
 									[[${category.name}]]
 								</option>
 							</select>
-							<!--ticket-category error-->
+							<!-- category errors-->
 							<div th:if="${#fields.hasErrors('category')}" class="invalid-feedback">
 								<ul>
 									<li th:each="err: ${#fields.errors('category')}" th:text="${err}"></li>
@@ -68,7 +67,7 @@
 								<option th:each="user : ${users}" th:value="${user.id}">
 									[[${user.name}]]</option>
 							</select>
-							<!--ticket-category error-->
+							<!-- user errors-->
 							<div th:if="${#fields.hasErrors('user')}" class="invalid-feedback">
 								<ul>
 									<li th:each="err: ${#fields.errors('user')}" th:text="${err}"></li>
