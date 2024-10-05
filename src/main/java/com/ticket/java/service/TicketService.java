@@ -24,6 +24,10 @@ public class TicketService {
 		return tickets;
 	}
 
+	public Ticket getById(Integer id) {
+		return tRepo.findById(id).get();
+	}
+
 	public Ticket save(Ticket ticket) {
 		return tRepo.save(ticket);
 
