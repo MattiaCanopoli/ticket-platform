@@ -45,17 +45,17 @@
 					<div class="row mb-3">
 						<!--ticket-category-->
 						<div class="col-6">
-							<select class="form-select" aria-label="Default select example" th:field="*{category}"
+							<select class="form-select" aria-label="Default select example" th:field="*{priority}"
 								id="category" th:errorclass="is-invalid">
 								<option selected value="">Select Priority</option>
-								<option th:each="category : ${categories}" th:value="${category.id}">
-									[[${category.name}]]
-								</option>
+								<option value="low">Low</option>
+								<option value="medium">Medium</option>
+								<option value="high">High</option>
 							</select>
 							<!-- category errors-->
-							<div th:if="${#fields.hasErrors('category')}" class="invalid-feedback">
+							<div th:if="${#fields.hasErrors('priority')}" class="invalid-feedback">
 								<ul>
-									<li th:each="err: ${#fields.errors('category')}" th:text="${err}"></li>
+									<li th:each="err: ${#fields.errors('priority')}" th:text="${err}"></li>
 								</ul>
 							</div>
 						</div>
