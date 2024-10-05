@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ticket.java.model.Ticket;
+import com.ticket.java.service.CategoryService;
 import com.ticket.java.service.TicketService;
 import com.ticket.java.service.UserService;
 
@@ -28,6 +29,9 @@ public class TicketController {
 
 	@Autowired
 	UserService uService;
+
+	@Autowired
+	CategoryService cService;
 
 	@GetMapping
 	public String index(Model model, @RequestParam(name = "title", required = false) String title) {
@@ -57,15 +61,17 @@ public class TicketController {
 	public String create(Model model) {
 		model.addAttribute("ticket", new Ticket());
 		model.addAttribute("users", uService.findAll());
+		model.addAttribute("categories", cService.findAll());
 		return "/tickets/create";
 	}
 
 	@PostMapping("/create")
 	public String store(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model) {
 
-		ticket.setStatus("open");
+		// ticket.setStatus("open");
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("users", uService.findAll());
+			model.addAttribute("categories", cService.findAll());
 			return "/tickets/create";
 		}
 

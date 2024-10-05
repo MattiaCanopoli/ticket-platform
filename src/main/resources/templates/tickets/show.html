@@ -12,16 +12,36 @@
 		<div class="row justify-content-center">
 			<div class="col-lg-6">
 				<h2 class="text-center mb-3">[[*{title}]]</h2>
-				<div class="row mb-2 fs-6 text justyfy-content-evenly text-center border border-primary rounded blue-background">
-					<div class="col-12 col-md-6">
+				<div
+					class="row mb-2 fs-6 text justyfy-content-evenly text-center border border-primary rounded blue-background">
+					<div class="col-12 col-md-4">
 						<span class="fw-medium">Priority</span>
 						<span class="fw-semibold fst-italic">[[*{priority}]]</span>
 					</div>
-					<div class="col-12 col-md-6">
+					<div class="col-12 col-md-4">
 						<span class="fw-medium">User</span>
 						<span class="fw-semibold fst-italic">[[*{user.name}]]</span>
 					</div>
+					<div class="col-12 col-md-4">
+						<span class="fw-medium">Status</span>
+						<span class="fw-semibold fst-italic">[[*{status.toUpperCase}]]</span>
+					</div>
 				</div>
+				<div
+					class="row mb-2 fs-6 text justyfy-content-center align-items-center text-center border border-primary rounded blue-background">
+
+					<div class="col-6">
+						<span class="fw-medium">Categories:</span>
+					</div>
+					<div class="col-6">
+						<ul class="align-items-center">
+							<li th:each="category : ${ticket.categories}" class="fw-semibold fst-italic">
+								[[${category.name}]]</li>
+						</ul>
+					</div>
+
+				</div>
+
 				<div class="row fs-5 border border-primary rounded text-center justify-content-center blue-background">
 					<div class="col-12 col-md-6">
 						<div>[[*{content}]]</div>

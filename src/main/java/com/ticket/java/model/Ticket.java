@@ -2,6 +2,7 @@ package com.ticket.java.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,6 +14,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
@@ -37,17 +40,12 @@ public class Ticket {
 	private String content;
 
 	@NotNull
-	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
-
-	@OneToMany(mappedBy = "ticket")
-	private Set<Note> notes;
-
-	@NotNull
 	@NotEmpty
 	private String priority;
 
+	@NotNull
+	@NotEmpty
+	@Column(nullable = false)
 	private String status;
 
 	@CreationTimestamp
@@ -57,6 +55,22 @@ public class Ticket {
 	@UpdateTimestamp
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
+
+	// RELATIONS
+
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
+
+	@OneToMany(mappedBy = "ticket")
+	private Set<Note> notes;
+
+	@NotEmpty
+	@NotNull
+	@ManyToMany
+	@JoinTable(joinColumns = @JoinColumn(name = "ticket_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+	private List<Category> categories;
 
 	@Transient
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:MM");
@@ -141,6 +155,14 @@ public class Ticket {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public List<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
 	}
 
 }
