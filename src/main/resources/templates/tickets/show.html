@@ -9,7 +9,7 @@
 <body class="bg-primary-subtle">
 	<nav th:replace="~{fragments/navbar :: navbar}"></nav>
 	<main class="container" th:object="${ticket}">
-		<div class="row justify-content-center">
+		<div class="row justify-content-center mb-4">
 			<div class="col-lg-6">
 				<h2 class="text-center mb-3">[[*{title}]]</h2>
 				<div
@@ -24,7 +24,7 @@
 					</div>
 					<div class="col-12 col-md-4">
 						<span class="fw-medium">Status</span>
-						<span class="fw-semibold fst-italic">[[*{status.toUpperCase}]]</span>
+						<span class="fw-semibold fst-italic">[[*{status.name}]]</span>
 					</div>
 				</div>
 				<div
@@ -34,8 +34,8 @@
 						<span class="fw-medium">Categories:</span>
 					</div>
 					<div class="col-6">
-						<ul class="align-items-center">
-							<li th:each="category : ${ticket.categories}" class="fw-semibold fst-italic">
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item blue-background" th:each="category : ${ticket.categories}">
 								[[${category.name}]]</li>
 						</ul>
 					</div>
@@ -49,7 +49,18 @@
 				</div>
 			</div>
 		</div>
-		<script th:replace="~{fragments/fragments :: scripts}"></script>
+		<div class="row justify-content-center">
+			<div class="col-lg-6">
+				<!-- Button show note input -->
+				<div class="d-flex justify-content-end">
+					<button type="button" class="btn btn-primary">
+						Add note
+					</button>
+				</div>
+			</div>
+		</div>
+	</main>
+	<script th:replace="~{fragments/fragments :: scripts}"></script>
 </body>
 
 </html>
