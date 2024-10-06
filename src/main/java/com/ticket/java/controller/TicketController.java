@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ticket.java.model.Ticket;
 import com.ticket.java.service.CategoryService;
+import com.ticket.java.service.NoteService;
 import com.ticket.java.service.TicketService;
+import com.ticket.java.service.TicketStatusService;
 import com.ticket.java.service.UserService;
 
 import jakarta.validation.Valid;
@@ -32,6 +34,12 @@ public class TicketController {
 
 	@Autowired
 	CategoryService cService;
+
+	@Autowired
+	TicketStatusService tsService;
+
+	@Autowired
+	NoteService nService;
 
 	@GetMapping
 	public String index(Model model, @RequestParam(name = "title", required = false) String title) {
@@ -52,6 +60,7 @@ public class TicketController {
 	@GetMapping("/{id}")
 	public String show(@PathVariable("id") Integer id, Model model) {
 
+		model.addAttribute("notes", nService.findAll());
 		model.addAttribute("ticket", tService.getById(id));
 
 		return "tickets/show";
@@ -68,7 +77,7 @@ public class TicketController {
 	@PostMapping("/create")
 	public String store(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model) {
 
-		// ticket.setStatus("open");
+		ticket.setStatus(tsService.getById(1));
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("users", uService.findAll());
 			model.addAttribute("categories", cService.findAll());
@@ -79,4 +88,5 @@ public class TicketController {
 
 		return "redirect:/";
 	}
+
 }
