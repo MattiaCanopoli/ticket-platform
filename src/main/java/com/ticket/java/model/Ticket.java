@@ -43,11 +43,6 @@ public class Ticket {
 	@NotEmpty
 	private String priority;
 
-	@NotNull
-	@NotEmpty
-	@Column(nullable = false)
-	private String status;
-
 	@CreationTimestamp
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
@@ -71,6 +66,10 @@ public class Ticket {
 	@ManyToMany
 	@JoinTable(joinColumns = @JoinColumn(name = "ticket_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private List<Category> categories;
+
+	@ManyToOne
+	@JoinColumn(name = "status_id")
+	private TicketStatus status;
 
 	@Transient
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:MM");
@@ -149,11 +148,11 @@ public class Ticket {
 		this.priority = priority;
 	}
 
-	public String getStatus() {
+	public TicketStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(TicketStatus status) {
 		this.status = status;
 	}
 
