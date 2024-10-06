@@ -13,8 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
@@ -60,11 +58,10 @@ public class Ticket {
 	@OneToMany(mappedBy = "ticket")
 	private List<Note> notes;
 
-	@NotEmpty
 	@NotNull
-	@ManyToMany
-	@JoinTable(joinColumns = @JoinColumn(name = "ticket_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-	private List<Category> categories;
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
 
 	@ManyToOne
 	@JoinColumn(name = "status_id")
@@ -155,12 +152,12 @@ public class Ticket {
 		this.status = status;
 	}
 
-	public List<Category> getCategories() {
-		return categories;
+	public Category getCategory() {
+		return category;
 	}
 
-	public void setCategories(List<Category> categories) {
-		this.categories = categories;
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 }

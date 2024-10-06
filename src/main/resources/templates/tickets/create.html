@@ -15,7 +15,7 @@
 			</div>
 		</div>
 		<div class="row mb-5 justify-content-center">
-			<div class="col-lg-6">
+			<div class="col-lg-8">
 				<form method="post" th:object="${ticket}" th:action="@{/create}">
 					<!--tiket-title-->
 					<div class="mb-3">
@@ -44,16 +44,16 @@
 					</div>
 
 					<div class="row mb-3">
-						<!--ticket-category-->
-						<div class="col-6">
-							<select class="form-select" aria-label="Default select example" th:field="*{priority}"
+						<!--ticket-priority-->
+						<div class="col-12 col-md-4">
+							<select class="form-select mb-2 mb-md-0" aria-label="Default select example" th:field="*{priority}"
 								id="category" th:errorclass="is-invalid">
 								<option selected value="">Select Priority</option>
 								<option value="low">Low</option>
 								<option value="medium">Medium</option>
 								<option value="high">High</option>
 							</select>
-							<!-- category errors-->
+							<!-- priority errors-->
 							<div th:if="${#fields.hasErrors('priority')}" class="invalid-feedback">
 								<ul>
 									<li th:each="err: ${#fields.errors('priority')}" th:text="${err}"></li>
@@ -61,8 +61,8 @@
 							</div>
 						</div>
 						<!--ticket-user-->
-						<div class="col-6">
-							<select class="form-select" aria-label="Default select example" th:field="*{user}" id="user"
+						<div class="col-12 col-md-4">
+							<select class="form-select mb-2 mb-md-0" aria-label="Default select example" th:field="*{user}" id="user"
 								th:errorclass="is-invalid">
 								<option selected value="">Select Operator</option>
 								<option th:each="user : ${users}" th:value="${user.id}">
@@ -75,17 +75,23 @@
 								</ul>
 							</div>
 						</div>
-					</div>
-					<div class="row mb-3">
-						<div class="col-12">
-							<span class="form-check" th:each="category : ${categories}">
-							  <input class="form-check-input" type="checkbox" th:value="${category.id}" th:id="'checkbox' + ${category.id}" th:field="${ticket.categories}">
-							  <label class="form-check-label" th:for="'checkbox' + ${category.id}">
-							    [[${category.name}]]
-							  </label>
-							</span>
+						<!--ticket category-->
+						<div class="col-12 col-md-4">
+							<select class="form-select mb-2 mb-md-0" aria-label="Default select example" th:field="*{category}"
+								id="categories" th:errorclass="is-invalid">
+								<option selected value="">Select Category</option>
+								<option th:each="category : ${categories}" th:value="${category.id}">
+									[[${category.name}]]</option>
+							</select>
+							<!--category errors-->
+							<div th:if="${#fields.hasErrors('category')}" class="invalid-feedback">
+								<ul>
+									<li th:each="err: ${#fields.errors('category')}" th:text="${err}"></li>
+								</ul>
+							</div>
 						</div>
 					</div>
+
 					<div class="d-flex justify-content-end">
 						<button class="btn btn-success mx-2 border border-1 border-light" type="submit">Submit</button>
 						<button class="btn btn-warning mx-2 border border-1 border-light" type="reset">Reset</button>

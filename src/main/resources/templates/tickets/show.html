@@ -10,37 +10,28 @@
 	<nav th:replace="~{fragments/navbar :: navbar}"></nav>
 	<main class="container" th:object="${ticket}">
 		<div class="row justify-content-center mb-4">
-			<div class="col-lg-6">
+			<div class="col-12 col-lg-8">
 				<h2 class="text-center mb-3">[[*{title}]]</h2>
 				<div
 					class="row mb-2 fs-6 text justyfy-content-evenly text-center border border-primary rounded blue-background">
-					<div class="col-12 col-md-4">
-						<span class="fw-medium">Priority</span>
+					<div class="col-12 col-md-3 d-flex flex-grow-1 flex-shrink-1 align-items-center">
+						<span class="fw-medium me-1">Priority:</span>
 						<span class="fw-semibold fst-italic">[[*{priority}]]</span>
 					</div>
-					<div class="col-12 col-md-4">
-						<span class="fw-medium">User</span>
+					<div class="col-12 col-md-3 d-flex flex-grow-1 flex-shrink-1 align-items-center">
+						<span class="fw-medium me-1">Category: </span>
+						<span class="fw-semibold fst-italic">[[*{category.name}]]</span>
+					</div>
+					<div class="col-12 col-md-3 d-flex flex-grow-1 flex-shrink-1 align-items-center">
+						<span class="fw-medium me-1">User: </span>
 						<span class="fw-semibold fst-italic">[[*{user.name}]]</span>
 					</div>
-					<div class="col-12 col-md-4">
-						<span class="fw-medium">Status</span>
+					<div class="col-12 col-md-3 d-flex flex-grow-1 flex-shrink-1 align-items-center">
+						<span class="fw-medium me-1">Status:</span>
 						<span class="fw-semibold fst-italic">[[*{status.name}]]</span>
 					</div>
 				</div>
-				<div
-					class="row mb-2 fs-6 text justyfy-content-center align-items-center text-center border border-primary rounded blue-background">
 
-					<div class="col-6">
-						<span class="fw-medium">Categories:</span>
-					</div>
-					<div class="col-6">
-						<ul class="list-group list-group-flush">
-							<li class="list-group-item blue-background" th:each="category : ${ticket.categories}">
-								[[${category.name}]]</li>
-						</ul>
-					</div>
-
-				</div>
 
 				<div
 					class="row fs-5 border border-primary rounded text-center justify-content-center blue-background mb-4">
@@ -48,11 +39,11 @@
 						<div>[[*{content}]]</div>
 					</div>
 				</div>
-				
-				<div
-					class="row fs-5 border border-primary rounded justify-content-center blue-background mb-4" th:if="${ticket.notes.size() > 0}">
+
+				<div class="row fs-5 border border-primary rounded justify-content-center blue-background mb-4"
+					th:if="${ticket.notes.size() > 0}">
 					<div class="col-12">
-						
+
 						<div th:each="note : ${ticket.notes}">
 							<div class="fs-6">
 								<span class="fw-medium">Date: </span>
@@ -72,10 +63,11 @@
 					</div>
 					<div>
 						<form method="post" th:action="@{{ticketId}/note (ticketId=${ticket.id})}">
-							
-							<div class="mb-3"> 
+
+							<div class="mb-3">
 								<label for="note-content" class="form-label">New note</label>
-								<textarea class="form-control" id="note-content" th:field="${note.content}" rows="5"></textarea>
+								<textarea class="form-control" id="note-content" th:field="${note.content}"
+									rows="5"></textarea>
 							</div>
 							<div class="d-flex justify-content-end">
 								<button type="submit" class="btn btn-warning">Add note</button>
@@ -83,8 +75,6 @@
 						</form>
 					</div>
 				</div>
-
-
 			</div>
 		</div>
 	</main>
