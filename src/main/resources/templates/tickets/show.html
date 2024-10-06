@@ -42,21 +42,49 @@
 
 				</div>
 
-				<div class="row fs-5 border border-primary rounded text-center justify-content-center blue-background">
+				<div
+					class="row fs-5 border border-primary rounded text-center justify-content-center blue-background mb-4">
 					<div class="col-12 col-md-6">
 						<div>[[*{content}]]</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="row justify-content-center">
-			<div class="col-lg-6">
-				<!-- Button show note input -->
-				<div class="d-flex justify-content-end">
-					<button type="button" class="btn btn-primary">
-						Add note
-					</button>
+				
+				<div
+					class="row fs-5 border border-primary rounded justify-content-center blue-background mb-4" th:if="${ticket.notes.size() > 0}">
+					<div class="col-12">
+						
+						<div th:each="note : ${ticket.notes}">
+							<div class="fs-6">
+								<span class="fw-medium">Date: </span>
+								<span>[[${note.formattedDate}]]</span>
+							</div>
+							<div class="text-center">[[${note.content}]]</div>
+						</div>
+					</div>
 				</div>
+
+				<div class="row justify-content-center">
+					<!-- Button show note input -->
+					<div class="d-flex justify-content-end">
+						<button type="button" class="btn btn-primary">
+							New note
+						</button>
+					</div>
+					<div>
+						<form method="post" th:action="@{{ticketId}/note (ticketId=${ticket.id})}">
+							
+							<div class="mb-3"> 
+								<label for="note-content" class="form-label">New note</label>
+								<textarea class="form-control" id="note-content" th:field="${note.content}" rows="5"></textarea>
+							</div>
+							<div class="d-flex justify-content-end">
+								<button type="submit" class="btn btn-warning">Add note</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+
 			</div>
 		</div>
 	</main>

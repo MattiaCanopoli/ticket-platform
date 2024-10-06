@@ -21,4 +21,8 @@ public class NoteService {
 	public Note getById(Integer id) {
 		return nRepo.findById(id).get();
 	}
+
+	public Note addNote(Note note) {
+		return nRepo.save(note);
+	}
 }
