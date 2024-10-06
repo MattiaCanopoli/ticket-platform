@@ -79,10 +79,31 @@ public class TicketController {
 
 		ticket.setStatus(tsService.getById(1));
 		if (bindingResult.hasErrors()) {
+			// bindingResult.getAllErrors().forEach(error ->
+			// System.out.println(error.toString()));
 			model.addAttribute("users", uService.findAll());
 			model.addAttribute("categories", cService.findAll());
 			return "/tickets/create";
 		}
+
+		tService.save(ticket);
+
+		return "redirect:/";
+	}
+
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable("id") Integer id, Model model) {
+		model.addAttribute("ticket", tService.getById(id));
+		model.addAttribute("users", uService.findAll());
+		model.addAttribute("categories", cService.findAll());
+		return "tickets/edit";
+	}
+
+	@PostMapping("/edit/{id}")
+	public String update(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindigResult, Model model) {
+//		model.addAttribute("ticket", tService.getById(id));
+//		model.addAttribute("users", uService.findAll());
+//		model.addAttribute("categories", cService.findAll());
 
 		tService.save(ticket);
 
