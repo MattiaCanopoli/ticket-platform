@@ -3,7 +3,6 @@ package com.ticket.java.model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -59,7 +58,7 @@ public class Ticket {
 	private User user;
 
 	@OneToMany(mappedBy = "ticket")
-	private Set<Note> notes;
+	private List<Note> notes;
 
 	@NotEmpty
 	@NotNull
@@ -108,11 +107,11 @@ public class Ticket {
 		this.user = user;
 	}
 
-	public Set<Note> getNotes() {
+	public List<Note> getNotes() {
 		return notes;
 	}
 
-	public void setNotes(Set<Note> notes) {
+	public void setNotes(List<Note> notes) {
 		this.notes = notes;
 	}
 
