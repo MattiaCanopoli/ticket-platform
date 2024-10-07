@@ -7,17 +7,17 @@
 </head>
 
 <body class="bg-primary-subtle">
-	<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+	<nav th:replace="~{fragments/navbar :: navbar('show')}"></nav>
 	<main class="container" th:object="${ticket}">
 		<div class="row justify-content-center mb-4">
 			<div class="col-12 col-lg-8">
 				<h2 class="text-center mb-3">[[*{title}]]</h2>
-			<!--redirect message-->
-			<th:block th:if="${editMessage != null}">
-				<th:block th:replace="~{fragments/alerts :: edit-alert(${editMessage})}"></th:block>
-			</th:block>
+				<!--redirect message-->
+				<th:block th:if="${editMessage != null}">
+					<th:block th:replace="~{fragments/alerts :: edit-alert(${editMessage})}"></th:block>
+				</th:block>
 				<div
-					class="row mb-2 fs-6 text justyfy-content-evenly text-center border border-primary rounded blue-background">
+					class="row mb-2 fs-6 text justyfy-content-evenly text-center border border-primary rounded light-blue-background">
 					<div class="col-12 col-md-3 d-flex flex-grow-1 flex-shrink-1 align-items-center">
 						<span class="fw-medium me-1">Priority:</span>
 						<span class="fw-semibold fst-italic">[[*{priority}]]</span>
@@ -38,20 +38,28 @@
 
 
 				<div
-					class="row fs-5 border border-primary rounded text-center justify-content-center blue-background mb-4">
+					class="row fs-5 border border-primary rounded text-center justify-content-center light-blue-background mb-4">
 					<div class="col-12 col-md-6">
 						<div>[[*{content}]]</div>
 					</div>
 				</div>
 
-				<div class="row fs-5 border border-primary rounded justify-content-center blue-background mb-4"
+				<div class="row fs-5 border border-primary rounded justify-content-center light-blue-background mb-4"
 					th:if="${ticket.notes.size() > 0}">
 					<div class="col-12">
 
 						<div th:each="note : ${ticket.notes}">
 							<div class="fs-6">
-								<span class="fw-medium">Date: </span>
-								<span>[[${note.formattedDate}]]</span>
+								<div class="d-flex justify-content-between">
+									<div>
+										<span class="fw-medium">Date: </span>
+										<span>[[${note.formattedDate}]]</span>
+									</div>
+									<div class="fs-6">
+										<span class="fw-medium">Written By: </span>
+										<span>Insert username</span>
+									</div>
+								</div>
 							</div>
 							<div class="text-center">[[${note.content}]]</div>
 						</div>
