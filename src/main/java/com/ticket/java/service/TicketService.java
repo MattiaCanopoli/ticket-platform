@@ -30,7 +30,13 @@ public class TicketService {
 
 	public Ticket save(Ticket ticket) {
 		return tRepo.save(ticket);
-
 	}
 
+	public Ticket update(Ticket ticket) {
+		return tRepo.save(ticket);
+	}
+
+	public void destroy(Integer id) {
+		tRepo.deleteById(id);
+	}
 }
