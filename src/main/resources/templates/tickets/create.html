@@ -72,11 +72,11 @@
 						
 						<!--ticket-user-->
 						<div class="col-12 col-md-4">
-							<select class="form-select" aria-label="user select" th:field="*{user}" id="user"
+							<select class="form-select text-capitalize" aria-label="user select" th:field="*{user}" id="user"
 								th:errorclass="is-invalid">
 								<option selected value="">Select Operator</option>
 								<option th:each="user : ${users}" th:value="${user.id}">
-									[[${user.name}]]</option>
+									[[${user.name}]] [[${user.lastname}]]</option>
 							</select>
 							<!-- user errors-->
 							<div th:if="${#fields.hasErrors('user')}" class="invalid-feedback">
@@ -88,7 +88,7 @@
 						
 						<!--ticket category-->
 						<div class="col-12 col-md-4">
-							<select class="form-select" aria-label="category select" th:field="*{category}"
+							<select class="form-select text-capitalize" aria-label="category select" th:field="*{category}"
 								id="categories" th:errorclass="is-invalid">
 								<option selected value="">Select Category</option>
 								<option th:each="category : ${categories}" th:value="${category.id}">
@@ -106,7 +106,7 @@
 					<!--button section-->
 					<div class="d-flex justify-content-end">
 						<button class="btn btn-success mx-2 border border-1 border-light" type="submit">Submit</button>
-						<button class="btn btn-warning mx-2 border border-1 border-light" type="reset">Reset</button>
+						<button class="btn btn-secondary mx-2 border border-1 border-light" type="reset">Reset</button>
 					</div>
 				</form>
 			</div>
