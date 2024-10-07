@@ -27,6 +27,16 @@ public class User {
 
 	@NotNull
 	@NotEmpty
+	@Column(name = "lastname")
+	private String lastname;
+
+	@NotNull
+	@NotEmpty
+	@Column(name = "username")
+	private String username = name + "." + lastname;
+
+	@NotNull
+	@NotEmpty
 	@Column(name = "password")
 	private String password;
 
@@ -93,6 +103,22 @@ public class User {
 
 	public void setTickets(Set<Ticket> tickets) {
 		this.tickets = tickets;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastName(String lastname) {
+		this.lastname = lastname;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 //	public Set<Note> getNotes() {
