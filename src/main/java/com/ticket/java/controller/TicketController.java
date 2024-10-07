@@ -107,7 +107,8 @@ public class TicketController {
 	}
 
 	@PostMapping("/edit/{id}")
-	public String update(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model) {
+	public String update(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model,
+			RedirectAttributes feedback) {
 
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("users", uService.findAll());
@@ -118,6 +119,7 @@ public class TicketController {
 		}
 
 		tService.update(ticket);
+		feedback.addFlashAttribute("editMessage", "Ticket " + ticket.getTitle() + " has been modified");
 		return "redirect:/{id}";
 	}
 
@@ -136,8 +138,9 @@ public class TicketController {
 	// DELETE
 
 	@PostMapping("/delete/{id}")
-	public String delete(@PathVariable("id") Integer id) {
+	public String delete(@PathVariable("id") Integer id, RedirectAttributes feedback) {
 		tService.destroy(id);
+		feedback.addFlashAttribute("deleteMessage", "Ticket " + id + " has been deleted");
 		return "redirect:/";
 	}
 }

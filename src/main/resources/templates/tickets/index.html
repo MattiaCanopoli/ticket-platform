@@ -15,7 +15,16 @@
 		<button class="btn btn-primary mb-3 border border-1 border-light">
 			<a class="text-reset text-decoration-none" th:href="@{/create}">Open Ticket</a>
 		</button>
-
+		<!--redirect messages-->
+		<!--on create-->
+		<th:block th:if="${createMessage != null}">
+			<th:block th:replace="~{fragments/alerts :: success-alert(${createMessage})}"></th:block>
+		</th:block>
+		<!--on delete-->
+		<th:block th:if="${deleteMessage != null}">
+			<th:block th:replace="~{fragments/alerts :: delete-alert(${deleteMessage})}"></th:block>
+		</th:block>
+		<!--tickets table-->
 		<table th:if="${tickets.size()>0}" class="table table-striped">
 			<thead>
 				<th>ID</th>
