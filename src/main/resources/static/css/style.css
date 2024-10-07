@@ -17,3 +17,13 @@
 .orange-text{
 	color:rgb(255,146,7);
 }
+
+.btn-orange{
+	background-color:rgb(255,146,7);
+	color:rgb(248, 249, 250)
+}
+
+.btn-orange:hover{
+	background-color:rgb(233, 133, 2);
+	color:rgb(248, 249, 250)
+}
