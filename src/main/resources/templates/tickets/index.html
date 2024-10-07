@@ -8,13 +8,15 @@
 </head>
 
 <body class="bg-primary-subtle">
-	<th:block th:replace="~{fragments/navbar :: navbar}"></th:block>
+	<th:block th:replace="~{fragments/navbar :: navbar('tickets')}"></th:block>
 
 	<main class="container">
-		<h1 class="my-5">ACME Support</h1>
-		<button class="btn btn-primary mb-3 border border-1 border-light">
-			<a class="text-reset text-decoration-none" th:href="@{/create}">Open Ticket</a>
-		</button>
+		<h1 class="my-5 orange-text">ACME Support</h1>
+		<div class="d-flex justify-content-end">
+			<button class="btn btn-primary mb-3 border border-1 border-light me-3">
+				<a class="text-reset text-decoration-none" th:href="@{/create}">New Ticket</a>
+			</button>
+		</div>
 		<!--redirect messages-->
 		<!--on create-->
 		<th:block th:if="${createMessage != null}">
@@ -34,7 +36,7 @@
 				<th>User</th>
 				<th>Creation Date</th>
 				<th>Last Update</th>
-				<th>Actions</th>
+				<th class="text-center">Actions</th>
 			</thead>
 			<tbody>
 				<tr th:each="ticket : ${tickets}">
@@ -47,7 +49,7 @@
 					<td>[[${ticket.user.name}]]</td>
 					<td>[[${ticket.formattedCreatedAt}]]</td>
 					<td>[[${ticket.formattedUpdatedAt}]]</td>
-					<td>
+					<td class="text-center">
 						<button class="btn btn-success border border-1 border-light btn-sm" th:href>
 							<a class="text-decoration-none text-reset" th:href="@{/{id}(id=${ticket.id})}">Details</a>
 						</button>
