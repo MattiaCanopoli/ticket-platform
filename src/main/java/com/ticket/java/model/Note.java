@@ -41,7 +41,7 @@ public class Note {
 	private LocalDateTime createdAt;
 
 	@Transient
-	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:MM");
+	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm");
 
 	// getter & setter
 
