@@ -19,4 +19,8 @@ public class UserService {
 		return users;
 	}
 
+	public User getById(Integer id) {
+		return uRepo.findById(id).get();
+	}
+
 }
