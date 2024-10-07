@@ -57,6 +57,14 @@
 				<div class="row justify-content-center">
 					<!-- Button show note input -->
 					<div class="d-flex justify-content-end">
+						<button class="btn btn-warning me-2">
+							<a class="text-decoration-none text-reset"
+								th:href="@{/edit/{id} (id=${ticket.id})}">Edit</a>
+						</button>
+						<form method="post" th:action="@{/delete/{id} (id=${ticket.id})}">
+							<button class="btn btn-danger me-2"
+								type="submit">Delete</button>
+						</form>
 						<button type="button" class="btn btn-primary">
 							New note
 						</button>
