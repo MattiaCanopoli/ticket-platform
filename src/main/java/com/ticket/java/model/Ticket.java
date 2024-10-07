@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,7 +42,7 @@ public class Ticket {
 	private String priority;
 
 	@CreationTimestamp
-	@Column(name = "created_at")
+	@Column(name = "created_at", updatable = false)
 	private LocalDateTime createdAt;
 
 	@UpdateTimestamp
@@ -55,7 +56,7 @@ public class Ticket {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@OneToMany(mappedBy = "ticket")
+	@OneToMany(mappedBy = "ticket", cascade = CascadeType.REMOVE)
 	private List<Note> notes;
 
 	@NotNull
@@ -63,12 +64,13 @@ public class Ticket {
 	@JoinColumn(name = "category_id")
 	private Category category;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "status_id")
 	private TicketStatus status;
 
 	@Transient
-	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:MM");
+	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm");
 
 	// getter & setter
 
@@ -133,7 +135,7 @@ public class Ticket {
 	}
 
 	public String getFormattedUpdatedAt() {
-		return this.createdAt.format(formatter);
+		return this.updatedAt.format(formatter);
 	}
 
 	public String getPriority() {
