@@ -10,12 +10,12 @@
 	<nav th:replace="~{fragments/navbar :: navbar}"></nav>
 	<main class="container" th:object="${ticket}">
 		<div class="row justify-content-center mb-4">
+			<div class="col-12 col-lg-8">
+				<h2 class="text-center mb-3">[[*{title}]]</h2>
 			<!--redirect message-->
 			<th:block th:if="${editMessage != null}">
 				<th:block th:replace="~{fragments/alerts :: edit-alert(${editMessage})}"></th:block>
 			</th:block>
-			<div class="col-12 col-lg-8">
-				<h2 class="text-center mb-3">[[*{title}]]</h2>
 				<div
 					class="row mb-2 fs-6 text justyfy-content-evenly text-center border border-primary rounded blue-background">
 					<div class="col-12 col-md-3 d-flex flex-grow-1 flex-shrink-1 align-items-center">
