@@ -16,7 +16,7 @@
 		</div>
 		<div class="row mb-5 justify-content-center">
 			<div class="col-lg-8">
-				<form method="post" th:object="${ticket}" th:action="@{/create}">
+				<form method="post" th:object="${ticket}" th:action="@{/edit/{id} (id=${ticket.id})}">
 					<!--tiket-title-->
 					<div class="mb-3">
 						<label for="title" class="form-label">Title</label>
@@ -32,7 +32,7 @@
 
 					<!--tiket-content-->
 					<div class="mb-3">
-						<label for="content" class="form-label">Describe the problem</label>
+						<label for="content" class="form-label">Describe the request</label>
 						<textarea class="form-control" id="content" rows="5" th:field="*{content}"
 							th:errorclass="is-invalid"></textarea>
 						<!-- content errors-->
@@ -42,12 +42,12 @@
 							</ul>
 						</div>
 					</div>
-
-					<div class="row mb-3">
+					<!--select section-->
+					<div class="row mb-3 gy-2">
 						<!--ticket-priority-->
-						<div class="col-12 col-md-4">
-							<select class="form-select mb-2 mb-md-0" aria-label="Default select example" th:field="*{priority}"
-								id="category" th:errorclass="is-invalid">
+						<div class="col-12 col-md-6">
+							<select class="form-select" aria-label="Default select example"
+								th:field="*{priority}" id="category" th:errorclass="is-invalid">
 								<option selected value="">Select Priority</option>
 								<option value="low">Low</option>
 								<option value="medium">Medium</option>
@@ -61,9 +61,9 @@
 							</div>
 						</div>
 						<!--ticket-user-->
-						<div class="col-12 col-md-4">
-							<select class="form-select mb-2 mb-md-0" aria-label="Default select example" th:field="*{user}" id="user"
-								th:errorclass="is-invalid">
+						<div class="col-12 col-md-6">
+							<select class="form-select" aria-label="Default select example"
+								th:field="*{user}" id="user" th:errorclass="is-invalid">
 								<option selected value="">Select Operator</option>
 								<option th:each="user : ${users}" th:value="${user.id}">
 									[[${user.name}]]</option>
@@ -76,9 +76,9 @@
 							</div>
 						</div>
 						<!--ticket category-->
-						<div class="col-12 col-md-4">
-							<select class="form-select mb-2 mb-md-0" aria-label="Default select example" th:field="*{category}"
-								id="categories" th:errorclass="is-invalid">
+						<div class="col-12 col-md-6">
+							<select class="form-select" aria-label="Default select example"
+								th:field="*{category}" id="categories" th:errorclass="is-invalid">
 								<option selected value="">Select Category</option>
 								<option th:each="category : ${categories}" th:value="${category.id}">
 									[[${category.name}]]</option>
@@ -90,10 +90,27 @@
 								</ul>
 							</div>
 						</div>
+						<!--ticket-status-->
+						<div class="col-12 col-md-6">
+							<select class="form-select" aria-label="Default select example"
+								th:field="*{status}" id="status" th:errorclass="is-invalid">n>
+								<option selected value="">Select Status</option>
+								<option th:each="state : ${status}" th:value="${state.id}">
+									[[${state.name}]]</option>
+							</select>
+							</select>
+							<!-- status errors-->
+							<div th:if="${#fields.hasErrors('status')}" class="invalid-feedback">
+								<ul>
+									<li th:each="err: ${#fields.errors('status')}" th:text="${err}"></li>
+								</ul>
+							</div>
+						</div>
 					</div>
 
 					<div class="d-flex justify-content-end">
-						<button class="btn btn-success mx-2 border border-1 border-light" type="submit">Submit</button>
+						<button class="btn btn-outline-success mx-2 border border-1 border-light"
+							type="submit">Submit</button>
 						<button class="btn btn-warning mx-2 border border-1 border-light" type="reset">Reset</button>
 					</div>
 				</form>
