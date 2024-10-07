@@ -8,17 +8,22 @@
 
 <body class="bg-primary-subtle">
 	<nav th:replace="~{fragments/navbar :: navbar}"></nav>
-	<main class="container">
-		<div class="row justify-content-center mb-5">
-			<div class="col-lg-6 text-center">
-				<h2>Ask ACME!</h2>
-			</div>
+	<!--header-->
+	<header class="row justify-content-center mb-5">
+		<div class="col-lg-6 text-center">
+			<h2>Ask ACME!</h2>
 		</div>
+	</header>
+	<!--main-->
+	<main class="container">
 		<div class="row mb-5 justify-content-center">
 			<div class="col-lg-8">
+				<!--form-->
 				<form method="post" th:object="${ticket}" th:action="@{/create}">
+					
 					<!--ticket status-->
 					<input type="hidden" name="status" id="status" value="1">
+					
 					<!--tiket-title-->
 					<div class="mb-3">
 						<label for="title" class="form-label">Title</label>
@@ -44,11 +49,13 @@
 							</ul>
 						</div>
 					</div>
-
+					
+					<!--select section-->
 					<div class="row mb-3 gy-2">
+						
 						<!--ticket-priority-->
 						<div class="col-12 col-md-4">
-							<select class="form-select" aria-label="Default select example" th:field="*{priority}"
+							<select class="form-select" aria-label="priority select" th:field="*{priority}"
 								id="category" th:errorclass="is-invalid">
 								<option selected value="">Select Priority</option>
 								<option value="low">Low</option>
@@ -62,9 +69,10 @@
 								</ul>
 							</div>
 						</div>
+						
 						<!--ticket-user-->
 						<div class="col-12 col-md-4">
-							<select class="form-select" aria-label="Default select example" th:field="*{user}" id="user"
+							<select class="form-select" aria-label="user select" th:field="*{user}" id="user"
 								th:errorclass="is-invalid">
 								<option selected value="">Select Operator</option>
 								<option th:each="user : ${users}" th:value="${user.id}">
@@ -77,9 +85,10 @@
 								</ul>
 							</div>
 						</div>
+						
 						<!--ticket category-->
 						<div class="col-12 col-md-4">
-							<select class="form-select" aria-label="Default select example" th:field="*{category}"
+							<select class="form-select" aria-label="category select" th:field="*{category}"
 								id="categories" th:errorclass="is-invalid">
 								<option selected value="">Select Category</option>
 								<option th:each="category : ${categories}" th:value="${category.id}">
@@ -93,7 +102,8 @@
 							</div>
 						</div>
 					</div>
-
+					
+					<!--button section-->
 					<div class="d-flex justify-content-end">
 						<button class="btn btn-success mx-2 border border-1 border-light" type="submit">Submit</button>
 						<button class="btn btn-warning mx-2 border border-1 border-light" type="reset">Reset</button>
@@ -101,9 +111,7 @@
 				</form>
 			</div>
 		</div>
-
 	</main>
-
 
 	<script th:replace="~{fragments/fragments :: scripts}"></script>
 </body>
