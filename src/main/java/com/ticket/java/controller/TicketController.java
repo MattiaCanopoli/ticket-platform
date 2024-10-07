@@ -1,5 +1,6 @@
 package com.ticket.java.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,8 @@ public class TicketController {
 	@Autowired
 	NoteService nService;
 
+	// READ
+
 	@GetMapping
 	public String index(Model model, @RequestParam(name = "title", required = false) String title) {
 
@@ -54,7 +57,6 @@ public class TicketController {
 		}
 
 		model.addAttribute("tickets", tickets);
-
 		return "tickets/index";
 	}
 
@@ -65,6 +67,8 @@ public class TicketController {
 
 		return "tickets/show";
 	}
+
+	// CREATE
 
 	@GetMapping("/create")
 	public String create(Model model) {
@@ -77,46 +81,60 @@ public class TicketController {
 	@PostMapping("/create")
 	public String store(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model) {
 
-		ticket.setStatus(tsService.getById(1));
 		if (bindingResult.hasErrors()) {
-			// bindingResult.getAllErrors().forEach(error ->
-			// System.out.println(error.toString()));
+			bindingResult.getAllErrors().forEach(error -> System.out.println(error.toString()));
 			model.addAttribute("users", uService.findAll());
 			model.addAttribute("categories", cService.findAll());
 			return "/tickets/create";
 		}
-
 		tService.save(ticket);
-
 		return "redirect:/";
 	}
+
+	// EDIT
 
 	@GetMapping("/edit/{id}")
 	public String edit(@PathVariable("id") Integer id, Model model) {
 		model.addAttribute("ticket", tService.getById(id));
 		model.addAttribute("users", uService.findAll());
 		model.addAttribute("categories", cService.findAll());
-		return "tickets/edit";
+		model.addAttribute("status", tsService.findAll());
+
+		return "/tickets/edit";
 	}
 
 	@PostMapping("/edit/{id}")
-	public String update(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindigResult, Model model) {
-//		model.addAttribute("ticket", tService.getById(id));
-//		model.addAttribute("users", uService.findAll());
-//		model.addAttribute("categories", cService.findAll());
+	public String update(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model) {
 
-		tService.save(ticket);
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("users", uService.findAll());
+			model.addAttribute("categories", cService.findAll());
+			model.addAttribute("status", tsService.findAll());
 
-		return "redirect:/";
+			return "/tickets/edit";
+		}
+
+		tService.update(ticket);
+		return "redirect:/{id}";
 	}
+
+	// NOTE
 
 	@PostMapping("{ticketId}/note")
 	public String addNote(@ModelAttribute("note") Note newNote, Model model,
 			@PathVariable("ticketId") Integer ticketId) {
 
 		newNote.setTicket(tService.getById(ticketId));
+		newNote.getTicket().setUpdatedAt(LocalDateTime.now());
 		nService.addNote(newNote);
 
 		return "redirect:/{ticketId}";
+	}
+	// DELETE
+
+	@PostMapping("/delete/{id}")
+	public String delete(@PathVariable("id") Integer id) {
+		tService.destroy(id);
+		return "redirect:/";
 	}
 }
