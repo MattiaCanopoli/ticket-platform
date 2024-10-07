@@ -11,35 +11,44 @@
 	<main class="container" th:object="${ticket}">
 		<div class="row justify-content-center mb-4">
 			<div class="col-12 col-lg-8">
-				<h2 class="text-center mb-3">[[*{title}]]</h2>
+				<h2 class="text-center mt-2 mb-4">[[*{title}]]</h2>
 				<!--redirect message-->
 				<th:block th:if="${editMessage != null}">
 					<th:block th:replace="~{fragments/alerts :: edit-alert(${editMessage})}"></th:block>
 				</th:block>
-				<div
-					class="row mb-2 fs-6 text justyfy-content-evenly text-center border border-primary rounded light-blue-background">
-					<div class="col-12 col-md-3 d-flex flex-grow-1 flex-shrink-1 align-items-center">
+				<div class="row py-2 mb-2 fs-6 text-center border border-primary rounded light-blue-background">
+					<div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
 						<span class="fw-medium me-1">Priority:</span>
 						<span class="fw-semibold fst-italic">[[*{priority}]]</span>
 					</div>
-					<div class="col-12 col-md-3 d-flex flex-grow-1 flex-shrink-1 align-items-center">
+					<div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
 						<span class="fw-medium me-1">Category: </span>
-						<span class="fw-semibold fst-italic">[[*{category.name}]]</span>
+						<span class="fw-semibold fst-italic text-capitalize">[[*{category.name}]]</span>
 					</div>
-					<div class="col-12 col-md-3 d-flex flex-grow-1 flex-shrink-1 align-items-center">
+					<div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
 						<span class="fw-medium me-1">User: </span>
-						<span class="fw-semibold fst-italic">[[*{user.name}]]</span>
+						<span class="fw-semibold fst-italic text-capitalize">[[*{user.name}]]
+							[[*{user.lastname}]]</span>
 					</div>
-					<div class="col-12 col-md-3 d-flex flex-grow-1 flex-shrink-1 align-items-center">
+					<div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
 						<span class="fw-medium me-1">Status:</span>
 						<span class="fw-semibold fst-italic">[[*{status.name}]]</span>
 					</div>
 				</div>
 
 
-				<div
-					class="row fs-5 border border-primary rounded text-center justify-content-center light-blue-background mb-4">
-					<div class="col-12 col-md-6">
+				<div class="row fs-5 border border-primary rounded light-blue-background mb-4 p-2">
+					<div class="col-12">
+						<div class="fs-6 d-flex justify-content-between mb-2">
+							<div>
+								<span class="fw-medium">Create Date: </span>
+								<span>[[*{formattedCreatedAt}]]</span>
+							</div>
+							<div>
+								<span class="fw-medium">Last Update: </span>
+								<span>[[*{formattedUpdatedAt}]]</span>
+							</div>
+						</div>
 						<div>[[*{content}]]</div>
 					</div>
 				</div>
@@ -49,19 +58,19 @@
 					<div class="col-12">
 
 						<div th:each="note : ${ticket.notes}">
-							<div class="fs-6">
-								<div class="d-flex justify-content-between">
+							<div class="fs-6 d-flex justify-content-between my-2 p-2">
 									<div>
 										<span class="fw-medium">Date: </span>
 										<span>[[${note.formattedDate}]]</span>
 									</div>
-									<div class="fs-6">
+									<!--TODO th:username-->
+									<div>
 										<span class="fw-medium">Written By: </span>
-										<span>Insert username</span>
+										<span class="text-danger">Insert username</span>
 									</div>
-								</div>
 							</div>
-							<div class="text-center">[[${note.content}]]</div>
+							<div>[[${note.content}]]</div>
+							<hr>
 						</div>
 					</div>
 				</div>
@@ -69,7 +78,7 @@
 				<div class="row justify-content-center">
 					<!-- Button show note input -->
 					<div class="d-flex justify-content-end">
-						<button class="btn btn-warning me-2 border border-1 border-light">
+						<button class="btn btn-orange me-2 border border-1 border-light">
 							<a class="text-decoration-none text-reset"
 								th:href="@{/edit/{id} (id=${ticket.id})}">Edit</a>
 						</button>
@@ -85,7 +94,7 @@
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
-										<h1 class="modal-title fs-5 text-danger" id="deleteModalLabel">Delate ticket
+										<h1 class="modal-title fs-5 text-danger" id="deleteModalLabel">Delete ticket
 											[[${ticket.title}]]</h1>
 										<button type="button" class="btn-close" data-bs-dismiss="modal"
 											aria-label="Close"></button>
