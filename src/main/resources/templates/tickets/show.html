@@ -61,10 +61,38 @@
 							<a class="text-decoration-none text-reset"
 								th:href="@{/edit/{id} (id=${ticket.id})}">Edit</a>
 						</button>
-						<form method="post" th:action="@{/delete/{id} (id=${ticket.id})}">
-							<button class="btn btn-danger me-2"
-								type="submit">Delete</button>
-						</form>
+						<!-- Button trigger modal -->
+						<button type="button" class="btn btn-danger me-2" data-bs-toggle="modal"
+							data-bs-target="#deleteModal">
+							Delete
+						</button>
+
+						<!-- Delete Modal -->
+						<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h1 class="modal-title fs-5 text-danger" id="deleteModalLabel">Delate ticket
+											[[${ticket.title}]]</h1>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"
+											aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										Deletion is a definitive action and cannot be reversed<br>
+										Are you sure you want to delete ticket [[${ticket.title}]]?
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-bs-dismiss="modal">Close</button>
+										<form method="post" th:action="@{/delete/{id} (id=${ticket.id})}">
+											<button class="btn btn-danger me-2" type="submit">Delete</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
 						<button type="button" class="btn btn-primary">
 							New note
 						</button>
