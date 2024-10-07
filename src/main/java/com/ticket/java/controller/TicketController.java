@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ticket.java.model.Note;
 import com.ticket.java.model.Ticket;
@@ -79,7 +80,8 @@ public class TicketController {
 	}
 
 	@PostMapping("/create")
-	public String store(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model) {
+	public String store(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model,
+			RedirectAttributes feedback) {
 
 		if (bindingResult.hasErrors()) {
 			bindingResult.getAllErrors().forEach(error -> System.out.println(error.toString()));
@@ -88,6 +90,7 @@ public class TicketController {
 			return "/tickets/create";
 		}
 		tService.save(ticket);
+		feedback.addFlashAttribute("createMessage", "ticket " + ticket.getId() + " has been created");
 		return "redirect:/";
 	}
 
