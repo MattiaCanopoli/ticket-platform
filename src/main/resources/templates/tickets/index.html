@@ -12,9 +12,10 @@
 
 	<main class="container">
 		<h1 class="my-5">ACME Support</h1>
-		<button class="btn btn-primary mb-3">
+		<button class="btn btn-primary mb-3 border border-1 border-light">
 			<a class="text-reset text-decoration-none" th:href="@{/create}">Open Ticket</a>
 		</button>
+
 		<table th:if="${tickets.size()>0}" class="table table-striped">
 			<thead>
 				<th>ID</th>
@@ -24,18 +25,61 @@
 				<th>User</th>
 				<th>Creation Date</th>
 				<th>Last Update</th>
+				<th>Actions</th>
 			</thead>
 			<tbody>
 				<tr th:each="ticket : ${tickets}">
 					<td>[[${ticket.id}]]</td>
 					<td>[[${ticket.priority}]]</td>
 					<td>
-						<a th:href="@{/{id}(id=${ticket.id})}">[[${ticket.title}]]</a>
+						[[${ticket.title}]]
 					</td>
 					<td>[[${ticket.status.name}]]</td>
 					<td>[[${ticket.user.name}]]</td>
 					<td>[[${ticket.formattedCreatedAt}]]</td>
 					<td>[[${ticket.formattedUpdatedAt}]]</td>
+					<td>
+						<button class="btn btn-success border border-1 border-light btn-sm" th:href>
+							<a class="text-decoration-none text-reset" th:href="@{/{id}(id=${ticket.id})}">Details</a>
+						</button>
+						<button class="btn btn-warning border border-1 border-light btn-sm">
+							<a class="text-decoration-none text-reset"
+								th:href="@{/edit/{id} (id=${ticket.id})}">Edit</a>
+						</button>
+						<!-- Button trigger modal -->
+						<button type="button" class="btn btn-danger border border-1 border-light btn-sm"
+							data-bs-toggle="modal" data-bs-target="#deleteModal">
+							Delete
+						</button>
+
+						<!-- Delete Modal -->
+						<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h1 class="modal-title fs-5 text-danger" id="deleteModalLabel">Delate ticket
+											[[${ticket.title}]]</h1>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"
+											aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										Deletion is a definitive action and cannot be reversed<br>
+										Are you sure you want to delete ticket [[${ticket.title}]]?
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary border border-1 border-light"
+											data-bs-dismiss="modal">Close</button>
+										<form method="post" th:action="@{/delete/{id} (id=${ticket.id})}">
+											<button class="btn btn-danger me-2 border border-1 border-light"
+												type="submit">Delete</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
 				</tr>
 			</tbody>
 		</table>
