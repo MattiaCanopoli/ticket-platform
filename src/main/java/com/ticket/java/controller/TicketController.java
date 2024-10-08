@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,7 +48,8 @@ public class TicketController {
 	// READ
 
 	@GetMapping
-	public String index(Model model, @RequestParam(name = "title", required = false) String title) {
+	public String index(Model model, @RequestParam(name = "title", required = false) String title,
+			Authentication auth) {
 
 		List<Ticket> tickets;
 
@@ -58,13 +60,17 @@ public class TicketController {
 		}
 
 		model.addAttribute("tickets", tickets);
+		model.addAttribute("username", auth.getName());
+		model.addAttribute("user", uService.getByUsername(auth.getName()));
 		return "tickets/index";
 	}
 
 	@GetMapping("/{id}")
-	public String show(@PathVariable("id") Integer id, Model model) {
+	public String show(@PathVariable("id") Integer id, Model model, Authentication auth) {
 		model.addAttribute("ticket", tService.getById(id));
 		model.addAttribute("note", new Note());
+		model.addAttribute("username", auth.getName());
+		model.addAttribute("user", uService.getByUsername(auth.getName()));
 
 		return "tickets/show";
 	}
@@ -72,21 +78,25 @@ public class TicketController {
 	// CREATE
 
 	@GetMapping("/create")
-	public String create(Model model) {
+	public String create(Model model, Authentication auth) {
 		model.addAttribute("ticket", new Ticket());
 		model.addAttribute("users", uService.findAll());
 		model.addAttribute("categories", cService.findAll());
+		model.addAttribute("username", auth.getName());
+		model.addAttribute("user", uService.getByUsername(auth.getName()));
 		return "/tickets/create";
 	}
 
 	@PostMapping("/create")
 	public String store(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model,
-			RedirectAttributes feedback) {
+			RedirectAttributes feedback, Authentication auth) {
 
 		if (bindingResult.hasErrors()) {
 			bindingResult.getAllErrors().forEach(error -> System.out.println(error.toString()));
 			model.addAttribute("users", uService.findAll());
 			model.addAttribute("categories", cService.findAll());
+			model.addAttribute("username", auth.getName());
+			model.addAttribute("user", uService.getByUsername(auth.getName()));
 			return "/tickets/create";
 		}
 		tService.save(ticket);
@@ -97,23 +107,27 @@ public class TicketController {
 	// EDIT
 
 	@GetMapping("/edit/{id}")
-	public String edit(@PathVariable("id") Integer id, Model model) {
+	public String edit(@PathVariable("id") Integer id, Model model, Authentication auth) {
 		model.addAttribute("ticket", tService.getById(id));
 		model.addAttribute("users", uService.findAll());
 		model.addAttribute("categories", cService.findAll());
 		model.addAttribute("status", tsService.findAll());
+		model.addAttribute("username", auth.getName());
+		model.addAttribute("user", uService.getByUsername(auth.getName()));
 
 		return "/tickets/edit";
 	}
 
 	@PostMapping("/edit/{id}")
 	public String update(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model,
-			RedirectAttributes feedback) {
+			RedirectAttributes feedback, Authentication auth) {
 
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("users", uService.findAll());
 			model.addAttribute("categories", cService.findAll());
 			model.addAttribute("status", tsService.findAll());
+			model.addAttribute("username", auth.getName());
+			model.addAttribute("user", uService.getByUsername(auth.getName()));
 
 			return "/tickets/edit";
 		}
@@ -126,11 +140,13 @@ public class TicketController {
 	// NOTE
 
 	@PostMapping("{ticketId}/note")
-	public String addNote(@ModelAttribute("note") Note newNote, Model model,
-			@PathVariable("ticketId") Integer ticketId) {
+	public String addNote(@ModelAttribute("note") Note newNote, Model model, @PathVariable("ticketId") Integer ticketId,
+			Authentication auth) {
 
 		newNote.setTicket(tService.getById(ticketId));
 		newNote.getTicket().setUpdatedAt(LocalDateTime.now());
+		model.addAttribute("username", auth.getName());
+		model.addAttribute("user", uService.getByUsername(auth.getName()));
 		nService.addNote(newNote);
 
 		return "redirect:/{ticketId}";
