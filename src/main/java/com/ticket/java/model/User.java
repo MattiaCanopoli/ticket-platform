@@ -41,6 +41,10 @@ public class User {
 	private String password;
 
 	@NotNull
+	@Column(name = "available")
+	private boolean available;
+
+	@NotNull
 	@NotEmpty
 	@Column(name = "email")
 	// TODO inserire constraint per unique
@@ -109,7 +113,7 @@ public class User {
 		return lastname;
 	}
 
-	public void setLastName(String lastname) {
+	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
 
@@ -119,6 +123,14 @@ public class User {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public boolean isAvailable() {
+		return available;
+	}
+
+	public void setAvailable(boolean available) {
+		this.available = available;
 	}
 
 //	public Set<Note> getNotes() {
