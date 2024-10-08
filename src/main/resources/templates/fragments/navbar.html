@@ -55,7 +55,7 @@
 					</form>
 				</div>
 				<div class="justify-content-end mx-5 blue-text">
-					<a th:href="@{../users/{id} (id=${user.id})}" sec:authentication="name"></a>
+					<a th:href="@{../users/{id} (id=${currentUser.id})}" sec:authentication="name"></a>
 				</div>
 		</nav>
 	</th:block>

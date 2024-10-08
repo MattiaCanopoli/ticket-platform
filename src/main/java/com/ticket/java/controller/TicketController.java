@@ -60,8 +60,7 @@ public class TicketController {
 		}
 
 		model.addAttribute("tickets", tickets);
-		model.addAttribute("username", auth.getName());
-		model.addAttribute("user", uService.getByUsername(auth.getName()));
+		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 		return "tickets/index";
 	}
 
@@ -69,8 +68,7 @@ public class TicketController {
 	public String show(@PathVariable("id") Integer id, Model model, Authentication auth) {
 		model.addAttribute("ticket", tService.getById(id));
 		model.addAttribute("note", new Note());
-		model.addAttribute("username", auth.getName());
-		model.addAttribute("user", uService.getByUsername(auth.getName()));
+		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 
 		return "tickets/show";
 	}
@@ -82,8 +80,7 @@ public class TicketController {
 		model.addAttribute("ticket", new Ticket());
 		model.addAttribute("users", uService.findAll());
 		model.addAttribute("categories", cService.findAll());
-		model.addAttribute("username", auth.getName());
-		model.addAttribute("user", uService.getByUsername(auth.getName()));
+		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 		return "/tickets/create";
 	}
 
@@ -95,8 +92,7 @@ public class TicketController {
 			bindingResult.getAllErrors().forEach(error -> System.out.println(error.toString()));
 			model.addAttribute("users", uService.findAll());
 			model.addAttribute("categories", cService.findAll());
-			model.addAttribute("username", auth.getName());
-			model.addAttribute("user", uService.getByUsername(auth.getName()));
+			model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 			return "/tickets/create";
 		}
 		tService.save(ticket);
@@ -112,8 +108,7 @@ public class TicketController {
 		model.addAttribute("users", uService.findAll());
 		model.addAttribute("categories", cService.findAll());
 		model.addAttribute("status", tsService.findAll());
-		model.addAttribute("username", auth.getName());
-		model.addAttribute("user", uService.getByUsername(auth.getName()));
+		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 
 		return "/tickets/edit";
 	}
@@ -126,8 +121,7 @@ public class TicketController {
 			model.addAttribute("users", uService.findAll());
 			model.addAttribute("categories", cService.findAll());
 			model.addAttribute("status", tsService.findAll());
-			model.addAttribute("username", auth.getName());
-			model.addAttribute("user", uService.getByUsername(auth.getName()));
+			model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 
 			return "/tickets/edit";
 		}
@@ -145,8 +139,7 @@ public class TicketController {
 
 		newNote.setTicket(tService.getById(ticketId));
 		newNote.getTicket().setUpdatedAt(LocalDateTime.now());
-		model.addAttribute("username", auth.getName());
-		model.addAttribute("user", uService.getByUsername(auth.getName()));
+		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 		nService.addNote(newNote);
 
 		return "redirect:/{ticketId}";
