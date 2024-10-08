@@ -12,19 +12,19 @@
 
 	<main class="container">
 		<h1 class="my-5 orange-text">ACME Support</h1>
-		<div class="d-flex justify-content-end">
+		<div sec:authorize="hasAuthority('ADMIN')" class="d-flex justify-content-end">
 			<button class="btn btn-primary mb-3 border border-1 border-light me-3">
 				<a class="text-reset text-decoration-none" th:href="@{/create}">New Ticket</a>
 			</button>
 		</div>
 		<!--redirect messages-->
-		<!--on create-->
-		<th:block th:if="${createMessage != null}">
-			<th:block th:replace="~{fragments/alerts :: success-alert(${createMessage})}"></th:block>
+		<!--green alert-->
+		<th:block th:if="${succesMessage != null}">
+			<th:block th:replace="~{fragments/alerts :: success-alert(${successMessage})}"></th:block>
 		</th:block>
-		<!--on delete-->
-		<th:block th:if="${deleteMessage != null}">
-			<th:block th:replace="~{fragments/alerts :: delete-alert(${deleteMessage})}"></th:block>
+		<!--red alert-->
+		<th:block th:if="${dangerMessage != null}">
+			<th:block th:replace="~{fragments/alerts :: danger-alert(${dangerMessage})}"></th:block>
 		</th:block>
 		<!--tickets table-->
 		<table th:if="${tickets.size()>0}" class="table table-striped">
@@ -33,6 +33,7 @@
 				<th>Priority</th>
 				<th>Title</th>
 				<th>Status</th>
+				<th>Categories</th>
 				<th>User</th>
 				<th>Creation Date</th>
 				<th>Last Update</th>
@@ -46,6 +47,11 @@
 						[[${ticket.title}]]
 					</td>
 					<td>[[${ticket.status.name}]]</td>
+					<td>
+						<ul>
+						  <li th:each="category : ${ticket.categories}">[[${category.name}]]</li>
+						</ul>
+					</td>
 					<td class="text-capitalize">[[${ticket.user.name}]] [[${ticket.user.lastname}]]</td>
 					<td>[[${ticket.formattedCreatedAt}]]</td>
 					<td>[[${ticket.formattedUpdatedAt}]]</td>
@@ -53,12 +59,12 @@
 						<button class="btn btn-success border border-1 border-light btn-sm" th:href>
 							<a class="text-decoration-none text-reset" th:href="@{/{id}(id=${ticket.id})}">Details</a>
 						</button>
-						<button class="btn btn-orange border border-1 border-light btn-sm">
+						<button sec:authorize="hasAuthority('ADMIN')" class="btn btn-orange border border-1 border-light btn-sm">
 							<a class="text-decoration-none text-reset"
 								th:href="@{/edit/{id} (id=${ticket.id})}">Edit</a>
 						</button>
 						<!-- Button trigger modal -->
-						<button type="button" class="btn btn-danger border border-1 border-light btn-sm"
+						<button sec:authorize="hasAuthority('ADMIN')" type="button" class="btn btn-danger border border-1 border-light btn-sm"
 							data-bs-toggle="modal" data-bs-target="#deleteModal">
 							Delete
 						</button>
