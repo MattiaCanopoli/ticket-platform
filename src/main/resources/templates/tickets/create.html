@@ -75,7 +75,7 @@
 							<select class="form-select text-capitalize" aria-label="user select" th:field="*{user}" id="user"
 								th:errorclass="is-invalid">
 								<option selected value="">Select Operator</option>
-								<option th:each="user : ${users}" th:value="${user.id}">
+								<option th:each="user : ${availableUsers}" th:value="${user.id}">
 									[[${user.name}]] [[${user.lastname}]]</option>
 							</select>
 							<!-- user errors-->

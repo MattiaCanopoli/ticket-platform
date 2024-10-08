@@ -81,6 +81,7 @@ public class TicketController {
 		model.addAttribute("users", uService.findAll());
 		model.addAttribute("categories", cService.findAll());
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
+		model.addAttribute("availableUsers", uService.findAvailable());
 		return "/tickets/create";
 	}
 
@@ -93,6 +94,7 @@ public class TicketController {
 			model.addAttribute("users", uService.findAll());
 			model.addAttribute("categories", cService.findAll());
 			model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
+			model.addAttribute("availableUsers", uService.findAvailable());
 			return "/tickets/create";
 		}
 		tService.save(ticket);
@@ -109,6 +111,7 @@ public class TicketController {
 		model.addAttribute("categories", cService.findAll());
 		model.addAttribute("status", tsService.findAll());
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
+		model.addAttribute("availableUsers", uService.findAvailable());
 
 		return "/tickets/edit";
 	}
@@ -122,6 +125,7 @@ public class TicketController {
 			model.addAttribute("categories", cService.findAll());
 			model.addAttribute("status", tsService.findAll());
 			model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
+			model.addAttribute("availableUsers", uService.findAvailable());
 
 			return "/tickets/edit";
 		}
