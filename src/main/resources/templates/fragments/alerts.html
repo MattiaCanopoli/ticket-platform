@@ -16,14 +16,14 @@
 		</div>
 	</th:block>
 	
-	<th:block th:fragment="delete-alert(message)">
+	<th:block th:fragment="danger-alert(message)">
 		<div class="alert alert-danger alert-dismissible fade show" role="alert">
 			<span th:text="${message}"></span>
 			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 		</div>
 	</th:block>
 	
-	<th:block th:fragment="edit-alert(message)">
+	<th:block th:fragment="warning-alert(message)">
 		<div class="alert alert-warning alert-dismissible fade show" role="alert">
 				<span th:text="${message}"></span>
 			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
