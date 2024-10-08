@@ -28,9 +28,9 @@ public class Note {
 	@Column(columnDefinition = "TEXT")
 	private String content;
 
-//	@ManyToOne
-//	@JoinColumn(name = "author", nullable = false)
-//	private User author;
+	@ManyToOne
+	@JoinColumn(name = "author", nullable = false)
+	private User author;
 
 	@ManyToOne
 	@JoinColumn(name = "ticket_id", nullable = false)
@@ -61,13 +61,13 @@ public class Note {
 		this.content = content;
 	}
 
-//	public User getAuthor() {
-//		return author;
-//	}
-//
-//	public void setAuthor(User author) {
-//		this.author = author;
-//	}
+	public User getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(User author) {
+		this.author = author;
+	}
 
 	public Ticket getTicket() {
 		return ticket;

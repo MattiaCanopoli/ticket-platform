@@ -56,8 +56,8 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private Set<Ticket> tickets;
 
-//	@OneToMany(mappedBy = "author")
-//	private Set<Note> notes;
+	@OneToMany(mappedBy = "author")
+	private Set<Note> notes;
 
 	// getter & setter
 
@@ -133,12 +133,12 @@ public class User {
 		this.available = available;
 	}
 
-//	public Set<Note> getNotes() {
-//		return notes;
-//	}
-//
-//	public void setNotes(Set<Note> notes) {
-//		this.notes = notes;
-//	}
+	public Set<Note> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(Set<Note> notes) {
+		this.notes = notes;
+	}
 
 }
