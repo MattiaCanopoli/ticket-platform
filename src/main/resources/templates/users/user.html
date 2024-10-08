@@ -11,7 +11,91 @@
 	<th:block th:replace="~{fragments/navbar :: navbar('user')}"></th:block>
 
 	<main class="container">
+		<div class="row justify-content-center mb-4" th:object="${user}">
+			<div class="col-12 col-lg-8">
+				<div
+					class="row py-2 mb-2 fs-6 text-center border border-primary rounded light-blue-background justify-content-between">
+					<div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
+						<span class="fw-medium me-1">Name:</span>
+						<span class="fw-semibold fst-italic text-capitalize">[[*{name}]] [[*{lastname}]]</span>
+					</div>
 
+					<div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
+						<span class="fw-medium me-1">Authorization:</span>
+						<span class="fw-semibold fst-italic" sec:authentication="principal.authorities"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--tickets table-->
+		<table th:if="${tickets.size()>0}" class="table table-striped">
+			<thead>
+				<th>ID</th>
+				<th>Priority</th>
+				<th>Title</th>
+				<th>Status</th>
+				<th>User</th>
+				<th>Creation Date</th>
+				<th>Last Update</th>
+				<th class="text-center">Actions</th>
+			</thead>
+			<tbody>
+				<tr th:each="ticket : ${tickets}">
+					<td>[[${ticket.id}]]</td>
+					<td>[[${ticket.priority}]]</td>
+					<td>
+						[[${ticket.title}]]
+					</td>
+					<td>[[${ticket.status.name}]]</td>
+					<td class="text-capitalize">[[${ticket.user.name}]] [[${ticket.user.lastname}]]</td>
+					<td>[[${ticket.formattedCreatedAt}]]</td>
+					<td>[[${ticket.formattedUpdatedAt}]]</td>
+					<td class="text-center">
+						<button class="btn btn-success border border-1 border-light btn-sm" th:href>
+							<a class="text-decoration-none text-reset" th:href="@{/{id}(id=${ticket.id})}">Details</a>
+						</button>
+						<button class="btn btn-orange border border-1 border-light btn-sm">
+							<a class="text-decoration-none text-reset"
+								th:href="@{/edit/{id} (id=${ticket.id})}">Edit</a>
+						</button>
+						<!-- Button trigger modal -->
+						<button type="button" class="btn btn-danger border border-1 border-light btn-sm"
+							data-bs-toggle="modal" data-bs-target="#deleteModal">
+							Delete
+						</button>
+
+						<!-- Delete Modal -->
+						<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h1 class="modal-title fs-5 text-danger" id="deleteModalLabel">Delate ticket
+											[[${ticket.title}]]</h1>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"
+											aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										Deletion is a definitive action and cannot be reversed<br>
+										Are you sure you want to delete ticket [[${ticket.title}]]?
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary border border-1 border-light"
+											data-bs-dismiss="modal">Close</button>
+										<form method="post" th:action="@{/delete/{id} (id=${ticket.id})}">
+											<button class="btn btn-danger me-2 border border-1 border-light"
+												type="submit">Delete</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</main>
 	<script th:replace="~{fragments/fragments :: scripts}"></script>
 </body>
