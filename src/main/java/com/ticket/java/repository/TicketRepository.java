@@ -10,4 +10,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
 	public List<Ticket> findByTitleContains(String title);
 
+	public List<Ticket> findByUserId(Integer userId);
+
 }
