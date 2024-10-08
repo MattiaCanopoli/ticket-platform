@@ -24,11 +24,16 @@ public class TicketService {
 		return tickets;
 	}
 
+	public List<Ticket> findUserTickets(Integer userId) {
+		return tRepo.findByUserId(userId);
+	}
+
 	public Ticket getById(Integer id) {
 		return tRepo.findById(id).get();
 	}
 
 	public Ticket save(Ticket ticket) {
+		ticket.getUser().setAvailable(false);
 		return tRepo.save(ticket);
 	}
 
