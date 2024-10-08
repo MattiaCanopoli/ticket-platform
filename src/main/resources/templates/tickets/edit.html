@@ -51,7 +51,7 @@
 					<div class="row mb-3 gy-2">
 
 						<!--ticket-priority-->
-						<div class="col-12 col-md-6">
+						<div class="col-12 col-md-4">
 							<select class="form-select" aria-label="priority select" th:field="*{priority}"
 								id="category" th:errorclass="is-invalid">
 								<option selected value="">Select Priority</option>
@@ -68,12 +68,18 @@
 						</div>
 
 						<!--ticket-user-->
-						<div class="col-12 col-md-6">
-							<select class="form-select text-capitalize" aria-label="user select" th:field="*{user}" id="user"
-								th:errorclass="is-invalid">
-								<option selected value="">Select Operator</option>
-								<option th:each="user : ${users}" th:value="${user.id}">
-									[[${user.name}]] [[${user.lastname}]]</option>
+						<div class="col-12 col-md-4">
+							<select class="form-select text-capitalize" aria-label="user select" th:field="*{user}"
+								id="user" th:errorclass="is-invalid">
+								<option value="">Select Operator</option>
+								<th:block th:if="${availableUsers.size>0}">
+									<option th:each="user : ${availableUsers}" th:value="${user.id}">
+										[[${user.name}]] [[${user.lastname}]]</option>
+								</th:block>
+								<th:block th:unless="${availableUsers.size>0}">
+									<option th:value="*{user.id}">
+										[[*{user.name}]] [[*{user.lastname}]]</option>
+								</th:block>
 							</select>
 							<!-- user errors-->
 							<div th:if="${#fields.hasErrors('user')}" class="invalid-feedback">
@@ -83,24 +89,9 @@
 							</div>
 						</div>
 
-						<!--ticket category-->
-						<div class="col-12 col-md-6">
-							<select class="form-select text-capitalize" aria-label="category select" th:field="*{category}"
-								id="categories" th:errorclass="is-invalid">
-								<option selected value="">Select Category</option>
-								<option th:each="category : ${categories}" th:value="${category.id}">
-									[[${category.name}]]</option>
-							</select>
-							<!--category errors-->
-							<div th:if="${#fields.hasErrors('category')}" class="invalid-feedback">
-								<ul>
-									<li th:each="err: ${#fields.errors('category')}" th:text="${err}"></li>
-								</ul>
-							</div>
-						</div>
 
 						<!--ticket-status-->
-						<div class="col-12 col-md-6">
+						<div class="col-12 col-md-4">
 							<select class="form-select" aria-label="status select" th:field="*{status}" id="status"
 								th:errorclass="is-invalid">n>
 								<option selected value="">Select Status</option>
@@ -115,15 +106,30 @@
 							</div>
 						</div>
 					</div>
-
-					<!--buttons section-->
-					<div class="d-flex justify-content-end">
-						<button class="btn btn-orange mx-2 border border-1 border-light"
-							type="submit">Submit</button>
-						<button class="btn btn-secondary mx-2 border border-1 border-light" type="reset">Reset</button>
+					<!--ticket category-->
+					<div class="col-12">
+						<ul class="list-group" name="categories" id="categories" th:errorclass="is-invalid">
+							<li class="list-group-item" th:each="category : ${categories}">
+								<input class="form-check-input me-1" type="checkbox" th:field="*{categories}"
+									th:value="${category.id}" th:id=|check-${category.id}|>
+								<label class="form-check-label stretched-link"
+									th:for=|check-${category.id}|>[[${category.name}]]</label>
+							</li>
+						</ul>
+						<!--category errors-->
+						<ul th:if="${#fields.hasErrors('categories')}" class="invalid-feedback">
+							<li th:each="err: ${#fields.errors('categories')}" th:text="${err}"></li>
+						</ul>
 					</div>
-				</form>
 			</div>
+
+			<!--buttons section-->
+			<div class="d-flex justify-content-end">
+				<button class="btn btn-orange mx-2 border border-1 border-light" type="submit">Submit</button>
+				<button class="btn btn-secondary mx-2 border border-1 border-light" type="reset">Reset</button>
+			</div>
+			</form>
+		</div>
 		</div>
 
 	</main>
