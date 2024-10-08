@@ -17,7 +17,7 @@
 	<!--main-->
 	<main class="container">
 		<div class="row mb-5 justify-content-center">
-			<div class="col-lg-8">
+			<div th:if="${availableUsers.size() >0}" class="col-lg-8">
 				<!--form-->
 				<form method="post" th:object="${ticket}" th:action="@{/create}">
 					
@@ -109,6 +109,9 @@
 						<button class="btn btn-secondary mx-2 border border-1 border-light" type="reset">Reset</button>
 					</div>
 				</form>
+			</div>
+			<div th:unless="${availableUsers.size() >0}" class="col-lg-8 text-center">
+				<h2>There are no available users at the moment.<br>Please try again later.</h2>
 			</div>
 		</div>
 	</main>
