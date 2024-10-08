@@ -78,7 +78,6 @@ public class TicketController {
 	@GetMapping("/create")
 	public String create(Model model, Authentication auth) {
 		model.addAttribute("ticket", new Ticket());
-		model.addAttribute("users", uService.findAll());
 		model.addAttribute("categories", cService.findAll());
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 		model.addAttribute("availableUsers", uService.findAvailable());
@@ -91,7 +90,6 @@ public class TicketController {
 
 		if (bindingResult.hasErrors()) {
 			bindingResult.getAllErrors().forEach(error -> System.out.println(error.toString()));
-			model.addAttribute("users", uService.findAll());
 			model.addAttribute("categories", cService.findAll());
 			model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 			model.addAttribute("availableUsers", uService.findAvailable());
@@ -107,7 +105,6 @@ public class TicketController {
 	@GetMapping("/edit/{id}")
 	public String edit(@PathVariable("id") Integer id, Model model, Authentication auth) {
 		model.addAttribute("ticket", tService.getById(id));
-		model.addAttribute("users", uService.findAll());
 		model.addAttribute("categories", cService.findAll());
 		model.addAttribute("status", tsService.findAll());
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
@@ -121,7 +118,6 @@ public class TicketController {
 			RedirectAttributes feedback, Authentication auth) {
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("users", uService.findAll());
 			model.addAttribute("categories", cService.findAll());
 			model.addAttribute("status", tsService.findAll());
 			model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
