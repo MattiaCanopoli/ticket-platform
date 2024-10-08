@@ -23,7 +23,7 @@ public class UserController {
 
 	@GetMapping("/{id}")
 	public String userPage(Model model, @PathVariable("id") Integer id, Authentication auth) {
-		model.addAttribute("user", uService.getByUsername(auth.getName()));
+		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 		model.addAttribute("tickets", tService.findUserTickets(id));
 		return "/users/user";
 	}
