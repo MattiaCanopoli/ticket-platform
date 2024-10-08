@@ -14,6 +14,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
@@ -27,18 +29,18 @@ public class Ticket {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@NotNull
-	@NotEmpty
+	@NotNull(message = "Title can not be empty")
+	@NotEmpty(message = "Title can not be empty")
 	@Column(name = "title", nullable = false)
 	private String title;
 
-	@NotNull
-	@NotEmpty
+	@NotNull(message = "Plese describe your request")
+	@NotEmpty(message = "Please describe your request")
 	@Column(name = "content", columnDefinition = "TEXT", nullable = false)
 	private String content;
 
-	@NotNull
-	@NotEmpty
+	@NotNull(message = "Select a priority level")
+	@NotEmpty(message = "Select a priority level")
 	private String priority;
 
 	@CreationTimestamp
@@ -51,7 +53,7 @@ public class Ticket {
 
 	// RELATIONS
 
-	@NotNull
+	@NotNull(message = "Please select an operator")
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
@@ -59,10 +61,10 @@ public class Ticket {
 	@OneToMany(mappedBy = "ticket", cascade = CascadeType.REMOVE)
 	private List<Note> notes;
 
-	@NotNull
-	@ManyToOne
-	@JoinColumn(name = "category_id")
-	private Category category;
+	@ManyToMany
+	@JoinTable(name = "ticket_categories", joinColumns = @JoinColumn(name = "ticket_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+	@NotEmpty(message = "Al least one category must be selected")
+	private List<Category> categories;
 
 	@NotNull
 	@ManyToOne
@@ -154,12 +156,12 @@ public class Ticket {
 		this.status = status;
 	}
 
-	public Category getCategory() {
-		return category;
+	public List<Category> getCategories() {
+		return categories;
 	}
 
-	public void setCategory(Category category) {
-		this.category = category;
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
 	}
 
 }
