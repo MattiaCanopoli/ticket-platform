@@ -1,6 +1,7 @@
 package com.ticket.java.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,12 +52,19 @@ public class TicketController {
 	public String index(Model model, @RequestParam(name = "title", required = false) String title,
 			Authentication auth) {
 
-		List<Ticket> tickets;
+		String role = uService.getUserMainRole(auth.getName());
 
-		if (title != null && !title.isEmpty()) {
-			tickets = tService.findByTitle(title);
-		} else {
+		List<Ticket> tickets = new ArrayList<Ticket>();
+
+		if (role.equals("ADMIN")) {
 			tickets = tService.findAll();
+		} else if (role.equals("USER")) {
+			Integer userId = uService.getByUsername(auth.getName()).getId();
+			tickets = tService.findUserTickets(userId);
+		}
+
+		if (role.equals("ADMIN") && (title != null && !title.isEmpty())) {
+			tickets = tService.findByTitle(title);
 		}
 
 		model.addAttribute("tickets", tickets);
@@ -65,8 +73,18 @@ public class TicketController {
 	}
 
 	@GetMapping("/{id}")
-	public String show(@PathVariable("id") Integer id, Model model, Authentication auth) {
-		model.addAttribute("ticket", tService.getById(id));
+	public String show(@PathVariable("id") Integer id, Model model, Authentication auth, RedirectAttributes feedback) {
+
+		Ticket ticket = tService.getById(id);
+		String role = uService.getUserMainRole(auth.getName());
+
+		if (role.equals("USER") && !(auth.getName().equals(ticket.getUser().getUsername()))) {
+
+			feedback.addFlashAttribute("dangerMessage", "Requested page cannot be accessed");
+			return "redirect:/";
+		}
+
+		model.addAttribute("ticket", ticket);
 		model.addAttribute("note", new Note());
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 
@@ -89,14 +107,15 @@ public class TicketController {
 			RedirectAttributes feedback, Authentication auth) {
 
 		if (bindingResult.hasErrors()) {
-			bindingResult.getAllErrors().forEach(error -> System.out.println(error.toString()));
+			// bindingResult.getAllErrors().forEach(error ->
+			// System.out.println(error.toString()));
 			model.addAttribute("categories", cService.findAll());
 			model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 			model.addAttribute("availableUsers", uService.findAvailable());
 			return "/tickets/create";
 		}
 		tService.save(ticket);
-		feedback.addFlashAttribute("createMessage", "ticket " + ticket.getId() + " has been created");
+		feedback.addFlashAttribute("successMessage", "ticket " + ticket.getId() + " has been created");
 		return "redirect:/";
 	}
 
@@ -127,7 +146,7 @@ public class TicketController {
 		}
 
 		tService.update(ticket);
-		feedback.addFlashAttribute("editMessage", "Ticket " + ticket.getTitle() + " has been modified");
+		feedback.addFlashAttribute("warningMessage", "Ticket " + ticket.getTitle() + " has been modified");
 		return "redirect:/{id}";
 	}
 
@@ -139,6 +158,7 @@ public class TicketController {
 
 		newNote.setTicket(tService.getById(ticketId));
 		newNote.getTicket().setUpdatedAt(LocalDateTime.now());
+		newNote.setAuthor(uService.getByUsername(auth.getName()));
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 		nService.addNote(newNote);
 
@@ -149,7 +169,7 @@ public class TicketController {
 	@PostMapping("/delete/{id}")
 	public String delete(@PathVariable("id") Integer id, RedirectAttributes feedback) {
 		tService.destroy(id);
-		feedback.addFlashAttribute("deleteMessage", "Ticket " + id + " has been deleted");
+		feedback.addFlashAttribute("dangerMessage", "Ticket " + id + " has been deleted");
 		return "redirect:/";
 	}
 }
