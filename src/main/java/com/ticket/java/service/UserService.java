@@ -27,4 +27,8 @@ public class UserService {
 		return uRepo.findByUsername(username).get();
 	}
 
+	public List<User> findAvailable() {
+		return uRepo.findByAvailableTrue();
+	}
+
 }
