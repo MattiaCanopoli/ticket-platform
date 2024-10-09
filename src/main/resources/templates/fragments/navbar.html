@@ -59,7 +59,13 @@
 					<div class="justify-content-end mx-xl-5 my-3 my-xl-0 blue-text">
 						<a th:href="@{../users/{id} (id=${currentUser.id})}" sec:authentication="name"></a>
 					</div>
-			</div>
+					<div>
+						<form class="d-flex" role="search" method="post" th:action="@{/logout}">
+							
+							<button class="btn btn-danger border border-1 border-light" type="submit">Logout</button>
+						</form>
+					</div>
+				</div>
 		</nav>
 	</th:block>
 
