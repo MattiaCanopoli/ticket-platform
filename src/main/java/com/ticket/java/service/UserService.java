@@ -37,7 +37,6 @@ public class UserService {
 
 		String role = "";
 		for (GrantedAuthority gAuth : roles) {
-			System.out.println(gAuth);
 			if (gAuth.getAuthority().equals("ADMIN")) {
 				return role = "ADMIN";
 
