@@ -2,6 +2,9 @@ package com.ticket.java.model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,6 +41,7 @@ public class User {
 	@NotNull
 	@NotEmpty
 	@Column(name = "password")
+	@JsonIgnore
 	private String password;
 
 	@NotNull
@@ -54,9 +58,11 @@ public class User {
 	private Set<Role> roles;
 
 	@OneToMany(mappedBy = "user")
+	@JsonBackReference
 	private Set<Ticket> tickets;
 
 	@OneToMany(mappedBy = "author")
+	@JsonBackReference
 	private Set<Note> notes;
 
 	// getter & setter
