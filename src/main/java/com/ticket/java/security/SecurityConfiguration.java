@@ -13,8 +13,9 @@ public class SecurityConfiguration {
 
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests().requestMatchers("/webjars/**", "/css/**", "/fragments/alerts").permitAll()
-				.requestMatchers("/**").hasAnyAuthority("USER", "ADMIN").and().formLogin().loginPage("/login")
+		http.authorizeHttpRequests().requestMatchers("/").hasAnyAuthority("ADMIN", "USER")
+				.requestMatchers("/edit", "/create", "/delete").hasAnyAuthority("ADMIN")
+				.requestMatchers("/api/**", "/webjars/**", "/css/**").permitAll().and().formLogin().loginPage("/login")
 				.loginProcessingUrl("/login").defaultSuccessUrl("/", true).permitAll().and().logout().and()
 				.exceptionHandling();
 
