@@ -52,7 +52,7 @@ public class TicketController {
 	public String index(Model model, @RequestParam(name = "title", required = false) String title,
 			Authentication auth) {
 
-		String role = uService.getUserMainRole(auth.getName());
+		String role = uService.getUserMainRole(auth.getAuthorities());
 
 		List<Ticket> tickets = new ArrayList<Ticket>();
 
@@ -76,7 +76,7 @@ public class TicketController {
 	public String show(@PathVariable("id") Integer id, Model model, Authentication auth, RedirectAttributes feedback) {
 
 		Ticket ticket = tService.getById(id);
-		String role = uService.getUserMainRole(auth.getName());
+		String role = uService.getUserMainRole(auth.getAuthorities());
 
 		if (role.equals("USER") && !(auth.getName().equals(ticket.getUser().getUsername()))) {
 
@@ -86,6 +86,7 @@ public class TicketController {
 
 		model.addAttribute("ticket", ticket);
 		model.addAttribute("note", new Note());
+		model.addAttribute("status", tsService.findAll());
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 
 		return "tickets/show";
@@ -164,6 +165,17 @@ public class TicketController {
 
 		return "redirect:/{ticketId}";
 	}
+
+	@PostMapping("/{id}/statusupdate")
+	public String statusUpdate(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model,
+			RedirectAttributes feedback) {
+
+		model.addAttribute("ticket", ticket);
+		model.addAttribute("status", tsService.findAll());
+
+		return "redirect:/{id}";
+	}
+
 	// DELETE
 
 	@PostMapping("/delete/{id}")
