@@ -1,13 +1,12 @@
 package com.ticket.java.service;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import com.ticket.java.model.Role;
 import com.ticket.java.model.User;
 import com.ticket.java.repository.UserRepository;
 
@@ -34,27 +33,17 @@ public class UserService {
 		return uRepo.findByAvailableTrue();
 	}
 
-	public List<String> getUserRoles(String username) {
+	public String getUserMainRole(Collection<? extends GrantedAuthority> roles) {
 
-		List<String> list = new ArrayList<String>();
-		Set<Role> roles = getByUsername(username).getRoles();
+		String role = "";
+		for (GrantedAuthority gAuth : roles) {
+			System.out.println(gAuth);
+			if (gAuth.getAuthority().equals("ADMIN")) {
+				return role = "ADMIN";
 
-		for (Role role : roles) {
-			list.add(role.getRoleName());
-		}
-
-		return list;
-	}
-
-	public String getUserMainRole(String username) {
-		List<String> roles = getUserRoles(username);
-
-		String role;
-
-		if (roles.contains("ADMIN")) {
-			role = "ADMIN";
-		} else {
-			role = "USER";
+			} else if (gAuth.getAuthority().equals("USER")) {
+				return role = "USER";
+			}
 		}
 		return role;
 	}
