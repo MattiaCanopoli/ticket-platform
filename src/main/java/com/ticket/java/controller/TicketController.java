@@ -172,7 +172,7 @@ public class TicketController {
 
 		model.addAttribute("ticket", ticket);
 		model.addAttribute("status", tsService.findAll());
-
+		tService.save(ticket);
 		return "redirect:/{id}";
 	}
 
