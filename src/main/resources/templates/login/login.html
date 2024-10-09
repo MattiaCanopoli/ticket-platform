@@ -14,7 +14,10 @@
 		<div class="row justify-content-center">
 			<div class="col-4">
 				<div th:if="${param.error}">
-					<th:block th:replace="~{fragments/alerts : dangerAlert('bad')}"></th:block>
+					<div class="alert alert-danger alert-dismissible fade show" role="alert">
+						<span>Ops...something went wrong.Please try again</span>
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
 				</div>
 				<form th:action="@{/login}" method="post">
 					<div class="mb-3">
@@ -28,7 +31,8 @@
 							placeholder="••••••••">
 					</div>
 					<div class="d-flex justify-content-end">
-						<button type="submit" class="btn btn-primary border border-1 border-light btn-lg">Login </button>
+						<button type="submit" class="btn btn-primary border border-1 border-light btn-lg">Login
+						</button>
 					</div>
 				</form>
 			</div>
