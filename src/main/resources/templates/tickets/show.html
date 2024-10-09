@@ -20,12 +20,13 @@
 				<th:block th:if="${dangerMessage != null}">
 					<th:block th:replace="~{fragments/alerts :: danger-alert(${dangerMessage})}"></th:block>
 				</th:block>
-				<div class="row py-2 mb-2 fs-6 text-center justify-content-center border border-primary rounded light-blue-background">
+				<div
+					class="row py-2 mb-2 fs-6 text-center justify-content-center border border-primary rounded light-blue-background">
 					<div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
 						<span class="fw-medium me-1">Priority:</span>
 						<span class="fw-semibold fst-italic">[[*{priority}]]</span>
 					</div>
-					
+
 					<div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
 						<span class="fw-medium me-1">User: </span>
 						<span class="fw-semibold fst-italic text-capitalize">[[*{user.name}]]
@@ -40,7 +41,8 @@
 					<div class="col-12 d-flex justify-content-center fs-6">
 						<div class="fw-medium me-1">Categories: </div>
 						<div class="d-flex align-items-center">
-							<span class="me-2 badge rounded-pill text-bg-secondary fs-6" th:each="category : *{categories}">[[${category.name}]]</span>
+							<span class="me-2 badge rounded-pill text-bg-secondary fs-6"
+								th:each="category : *{categories}">[[${category.name}]]</span>
 						</div>
 					</div>
 				</div>
@@ -73,7 +75,8 @@
 								<!--TODO th:username-->
 								<div>
 									<span class="fw-medium">Written By: </span>
-									<span class="text-capitalize">[[${note.author.name}]] [[${note.author.lastname}]]</span>
+									<span class="text-capitalize">[[${note.author.name}]]
+										[[${note.author.lastname}]]</span>
 								</div>
 							</div>
 							<div>[[${note.content}]]</div>
@@ -84,49 +87,110 @@
 
 				<div class="row justify-content-center">
 					<!-- Button show note input -->
-					<div class="d-flex justify-content-end">
-						<button sec:authorize="hasAuthority('ADMIN')" class="btn btn-orange me-2 border border-1 border-light">
-							<a class="text-decoration-none text-reset"
-								th:href="@{/edit/{id} (id=${ticket.id})}">Edit</a>
-						</button>
-						<!-- Button trigger modal -->
-						<button sec:authorize="hasAuthority('ADMIN')" type="button" class="btn btn-danger me-2 border border-1 border-light"
-							data-bs-toggle="modal" data-bs-target="#deleteModal">
-							Delete
-						</button>
+					<div class="d-flex justify-content-between">
+						<div>
+							<button sec:authorize="hasAuthority('ADMIN')"
+								class="btn btn-orange me-2 border border-1 border-light">
+								<a class="text-decoration-none text-reset"
+									th:href="@{/edit/{id} (id=${ticket.id})}">Edit</a>
+							</button>
 
-						<!-- Delete Modal -->
-						<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
-							aria-hidden="true">
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h1 class="modal-title fs-5 text-danger" id="deleteModalLabel">Delete ticket
-											[[${ticket.title}]]</h1>
-										<button type="button" class="btn-close" data-bs-dismiss="modal"
-											aria-label="Close"></button>
-									</div>
-									<div class="modal-body">
-										Deletion is a definitive action and cannot be reversed<br>
-										Are you sure you want to delete ticket [[${ticket.title}]]?
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary border border-1 border-light"
-											data-bs-dismiss="modal">Close</button>
-										<form method="post" th:action="@{/delete/{id} (id=${ticket.id})}">
-											<button class="btn btn-danger me-2 border border-1 border-light"
-												type="submit">Delete</button>
+							<!-- Button trigger statusUpdate modal -->
+							<button sec:authorize="hasAuthority('USER')" type="button"
+								class="btn btn-secondary me-2 border border-1 border-light" data-bs-toggle="modal"
+								data-bs-target="#statusUpdateModal">
+								Update Status
+							</button>
+
+							<!-- Status Update Modal -->
+							<div class="modal fade" id="statusUpdateModal" tabindex="-1"
+								aria-labelledby="statusUpdateModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h1 class="modal-title fs-5 text-danger" id="statusUpdateModalLabel">Update
+												status for [[${ticket.title}]]</h1>
+											<button type="button" class="btn-close" data-bs-dismiss="modal"
+												aria-label="Close"></button>
+										</div>
+										<form method="post" th:object="${ticket}"
+											th:action="@{/{id}/statusupdate (id=${ticket.id})}">
+											<div class="modal-body">
+												<input type="hidden" th:field="*{id}" th:value="*{id}">
+												<input type="hidden" th:field="*{title}" th:value="*{title}">
+												<input type="hidden" th:field="*{priority}" th:value="*{priority}">
+												<input type="hidden" th:field="*{user}" th:value="*{user.id}">
+												<input type="hidden" th:field="*{content}" th:value="*{content}">
+												<input type="hidden" th:each="category : *{categories}"
+													th:field="*{categories}" th:value="${category.id}">
+												<!--ticket status select-->
+												<select class="form-select text-capitalize" aria-label="user select"
+													th:field="*{status}" id="user" th:errorclass="is-invalid">
+													<option selected value="">Select Status</option>
+													<option th:each="state : ${status}" th:value="${state.id}">
+														[[${state.name}]]</option>
+												</select>
+												<!-- ticket status errors-->
+												<div th:if="${#fields.hasErrors('user')}" class="invalid-feedback">
+													<ul>
+														<li th:each="err: ${#fields.errors('user')}" th:text="${err}">
+														</li>
+													</ul>
+												</div>
+											</div>
+											<div class="modal-footer">
+												<button type="button"
+													class="btn btn-secondary border border-1 border-light"
+													data-bs-dismiss="modal">Close</button>
+												<button class="btn btn-danger me-2 border border-1 border-light"
+													type="submit">Update</button>
+											</div>
 										</form>
 									</div>
 								</div>
 							</div>
-						</div>
 
+							<!-- Button trigger delete modal -->
+							<button sec:authorize="hasAuthority('ADMIN')" type="button"
+								class="btn btn-danger me-2 border border-1 border-light" data-bs-toggle="modal"
+								data-bs-target="#deleteModal">
+								Delete
+							</button>
+
+							<!-- Delete Modal -->
+							<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+								aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h1 class="modal-title fs-5 text-danger" id="deleteModalLabel">Delete ticket
+												[[${ticket.title}]]</h1>
+											<button type="button" class="btn-close" data-bs-dismiss="modal"
+												aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											Deletion is a definitive action and cannot be reversed<br>
+											Are you sure you want to delete ticket [[${ticket.title}]]?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary border border-1 border-light"
+												data-bs-dismiss="modal">Close</button>
+											<form method="post" th:action="@{/delete/{id} (id=${ticket.id})}">
+												<button class="btn btn-danger me-2 border border-1 border-light"
+													type="submit">Delete</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 						<button type="button" class="btn btn-primary border border-1 border-light"
 							data-bs-toggle="collapse" data-bs-target="#collapseExample">
 							New note
 						</button>
 					</div>
+
+					<!--new note form-->
 					<div class="collapse" id="collapseExample">
 						<form method="post" th:action="@{{ticketId}/note (ticketId=${ticket.id})}">
 
