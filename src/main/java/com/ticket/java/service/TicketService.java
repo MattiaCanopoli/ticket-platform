@@ -24,6 +24,16 @@ public class TicketService {
 		return tickets;
 	}
 
+	public List<Ticket> findByStatus(String status) {
+		List<Ticket> tickets = tRepo.findByStatusNameContains(status);
+		return tickets;
+	}
+
+	public List<Ticket> findByCategory(String category) {
+		List<Ticket> tickets = tRepo.findByCategoriesNameContains(category);
+		return tickets;
+	}
+
 	public List<Ticket> findUserTickets(Integer userId) {
 		return tRepo.findByUserId(userId);
 	}
