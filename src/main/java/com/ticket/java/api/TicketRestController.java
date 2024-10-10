@@ -3,6 +3,8 @@ package com.ticket.java.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,7 @@ public class TicketRestController {
 	TicketService tService;
 
 	@GetMapping
-	public List<Ticket> index(@RequestParam(name = "category", required = false) String category,
+	public ResponseEntity<List<Ticket>> index(@RequestParam(name = "category", required = false) String category,
 			@RequestParam(name = "status", required = false) String status) {
 
 		List<Ticket> tickets = tService.findAll();
@@ -32,7 +34,11 @@ public class TicketRestController {
 			tickets = tService.findByStatus(status);
 		}
 
-		return tickets;
+		if (tickets.size() == 0) {
+			return new ResponseEntity<>(tickets, HttpStatus.NO_CONTENT);
+		}
+
+		return new ResponseEntity<>(tickets, HttpStatus.OK);
 	}
 
 }
