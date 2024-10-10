@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body>
+	<th:block th:fragment="delete-modal">
+		<!-- Delete Modal -->
+		<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5 text-danger" id="deleteModalLabel">Delete ticket
+							[[${ticket.title}]]</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						Deletion is a definitive action and cannot be reversed<br>
+						Are you sure you want to delete ticket [[${ticket.title}]]?
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary border border-1 border-light"
+							data-bs-dismiss="modal">Close</button>
+						<form method="post" th:action="@{/tickets/delete/{id} (id=${ticket.id})}">
+							<button class="btn btn-danger me-2 border border-1 border-light"
+								type="submit">Delete</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+	<th:block th:fragment="status-update-modal">
+		<div class="modal fade" id="statusUpdateModal" tabindex="-1" aria-labelledby="statusUpdateModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5 text-danger" id="statusUpdateModalLabel">Update
+							status for [[${ticket.title}]]</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<form method="post" th:object="${ticket}"
+						th:action="@{/tickets/statusupdate/{id} (id=${ticket.id})}">
+						<div class="modal-body">
+							<input type="hidden" th:field="*{id}" th:value="*{id}">
+							<input type="hidden" th:field="*{title}" th:value="*{title}">
+							<input type="hidden" th:field="*{priority}" th:value="*{priority}">
+							<input type="hidden" th:field="*{user}" th:value="*{user.id}">
+							<input type="hidden" th:field="*{content}" th:value="*{content}">
+							<input type="hidden" th:each="category : *{categories}" th:field="*{categories}"
+								th:value="${category.id}">
+							<!--ticket status update select-->
+							<select class="form-select text-capitalize" aria-label="user select" th:field="*{status}"
+								id="user" th:errorclass="is-invalid">
+								<option selected value="">Select Status</option>
+								<option th:each="state : ${status}" th:value="${state.id}">
+									[[${state.name}]]</option>
+							</select>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary border border-1 border-light"
+								data-bs-dismiss="modal">Close</button>
+							<button class="btn btn-warning me-2 border border-1 border-light"
+								type="submit">Update</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</th:block>
+</body>
+
+</html>
