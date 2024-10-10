@@ -12,7 +12,7 @@
 	<th:block th:fragment="navbar(currentRoute)">
 		<nav class="navbar navbar-expand-lg orange-backgroud mb-5">
 			<div class="container-fluid">
-				<a class="navbar-brand blue-text fw-bolder" th:href="@{/}">ACME <span
+				<a class="navbar-brand blue-text fw-bolder" th:href="@{/tickets}">ACME <span
 						class="fst-italic">company</span></a>
 				<button class="navbar-toggler blue-text" type="button" data-bs-toggle="collapse"
 					data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -22,15 +22,15 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 						<li class="nav-item">
-							<a class="nav-link " aria-current="page" th:href="@{/}"
+							<a class="nav-link " aria-current="page" th:href="@{/tickets}"
 								th:classappend="${currentRoute == 'tickets' ? 'blue-text fw-medium' : 'non-active'}">Tickets</a>
 						</li>
 						<li sec:authorize="hasAuthority('ADMIN')" class="nav-item">
 							<a class="nav-link "
 								th:classappend="${currentRoute == 'create' ? 'blue-text fw-medium' : 'non-active'}"
-								th:href="@{/create}">New Ticket</a>
+								th:href="@{/tickets/create}">New Ticket</a>
 						</li>
-						<li class="nav-item dropdown">
+						<!--<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
 								aria-expanded="false">
 								Dropdown
@@ -46,7 +46,7 @@
 						</li>
 						<li class="nav-item">
 							<a class="nav-link disabled" aria-disabled="true">Disabled</a>
-						</li>
+						</li>-->
 					</ul>
 
 					<div sec:authorize="hasAuthority('ADMIN')">
@@ -57,7 +57,7 @@
 						</form>
 					</div>
 					<div class="justify-content-end mx-xl-5 my-3 my-xl-0 blue-text">
-						<a th:href="@{../users/{id} (id=${currentUser.id})}" sec:authentication="name"></a>
+						<a th:href="@{../../users/{id} (id=${currentUser.id})}" sec:authentication="name"></a>
 					</div>
 					<div>
 						<form class="d-flex" role="search" method="post" th:action="@{/logout}">
