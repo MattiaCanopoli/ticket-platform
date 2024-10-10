@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ticket.java.service.TicketService;
@@ -24,8 +25,14 @@ public class UserController {
 	@GetMapping("/{id}")
 	public String userPage(Model model, @PathVariable("id") Integer id, Authentication auth) {
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
-		model.addAttribute("tickets", tService.findUserTickets(id));
+		// model.addAttribute("tickets", tService.findUserTickets(id));
 		return "/users/user";
+	}
+
+	@PostMapping("/changestatus/{id}")
+	public String changeUserStatus() {
+		System.out.println("test");
+		return "redirect:/tickets";
 	}
 
 }
