@@ -2,6 +2,8 @@ package com.ticket.java.model;
 
 import java.util.Set;
 
+import org.hibernate.annotations.Formula;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -47,6 +49,12 @@ public class User {
 	@NotNull
 	@Column(name = "available")
 	private boolean available;
+
+	@Formula("(SELECT COUNT(ticket.id) FROM ticket WHERE (ticket.status_id=1 OR ticket.status_id=2) AND ticket.user_id=id)")
+	private Integer openTickets;
+
+	@Formula("(SELECT COUNT(ticket.id) FROM ticket WHERE ticket.status_id=3 AND ticket.user_id=id)")
+	private Integer closedTickets;
 
 	@NotNull
 	@NotEmpty
@@ -145,6 +153,22 @@ public class User {
 
 	public void setNotes(Set<Note> notes) {
 		this.notes = notes;
+	}
+
+	public Integer getOpenTickets() {
+		return openTickets;
+	}
+
+	public void setOpenTickets(Integer openTickets) {
+		this.openTickets = openTickets;
+	}
+
+	public Integer getClosedTickets() {
+		return closedTickets;
+	}
+
+	public void setClosedTickets(Integer closedTickets) {
+		this.closedTickets = closedTickets;
 	}
 
 }
