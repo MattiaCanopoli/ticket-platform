@@ -28,7 +28,7 @@ import com.ticket.java.service.UserService;
 import jakarta.validation.Valid;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/tickets")
 public class TicketController {
 
 	@Autowired
@@ -72,7 +72,7 @@ public class TicketController {
 		return "tickets/index";
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/show/{id}")
 	public String show(@PathVariable("id") Integer id, Model model, Authentication auth, RedirectAttributes feedback) {
 
 		Ticket ticket = tService.getById(id);
@@ -117,7 +117,7 @@ public class TicketController {
 		}
 		tService.save(ticket);
 		feedback.addFlashAttribute("successMessage", "ticket " + ticket.getId() + " has been created");
-		return "redirect:/";
+		return "redirect:/tickets";
 	}
 
 	// EDIT
@@ -148,12 +148,12 @@ public class TicketController {
 
 		tService.update(ticket);
 		feedback.addFlashAttribute("warningMessage", "Ticket " + ticket.getTitle() + " has been modified");
-		return "redirect:/{id}";
+		return "redirect:/tickets/show/{id}";
 	}
 
 	// NOTE
 
-	@PostMapping("{ticketId}/note")
+	@PostMapping("/note/{ticketId}")
 	public String addNote(@ModelAttribute("note") Note newNote, Model model, @PathVariable("ticketId") Integer ticketId,
 			Authentication auth) {
 
@@ -163,17 +163,25 @@ public class TicketController {
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
 		nService.addNote(newNote);
 
-		return "redirect:/{ticketId}";
+		return "redirect:/tickets/show/{ticketId}";
 	}
 
-	@PostMapping("/{id}/statusupdate")
+	@PostMapping("/statusupdate/{id}")
 	public String statusUpdate(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model,
 			RedirectAttributes feedback) {
+
+		if (bindingResult.hasErrors()) {
+			feedback.addFlashAttribute("dangerMessage",
+					"Status for ticket \"" + ticket.getTitle() + "\" cannot be empty");
+			return "redirect:/tickets/show/{id}";
+		}
 
 		model.addAttribute("ticket", ticket);
 		model.addAttribute("status", tsService.findAll());
 		tService.save(ticket);
-		return "redirect:/{id}";
+		feedback.addFlashAttribute("successMessage",
+				"Status for ticket \"" + ticket.getTitle() + "\" successfully updated");
+		return "redirect:/tickets/show/{id}";
 	}
 
 	// DELETE
@@ -182,6 +190,6 @@ public class TicketController {
 	public String delete(@PathVariable("id") Integer id, RedirectAttributes feedback) {
 		tService.destroy(id);
 		feedback.addFlashAttribute("dangerMessage", "Ticket " + id + " has been deleted");
-		return "redirect:/";
+		return "redirect:/tickets";
 	}
 }

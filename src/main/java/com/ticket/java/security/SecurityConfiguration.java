@@ -13,10 +13,12 @@ public class SecurityConfiguration {
 
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests().requestMatchers("/").hasAnyAuthority("ADMIN", "USER")
-				.requestMatchers("/edit", "/create", "/delete").hasAnyAuthority("ADMIN")
-				.requestMatchers("/api/**", "/webjars/**", "/css/**").permitAll().and().formLogin().loginPage("/login")
-				.loginProcessingUrl("/login").defaultSuccessUrl("/", true).permitAll().and().logout().and()
+		http.authorizeHttpRequests()
+				.requestMatchers("/tickets", "/tickets/show/**", "/tickets/note/**", "/users/**", "fragments/**")
+				.hasAnyAuthority("ADMIN", "USER").requestMatchers("tickets/statusupdate/**").hasAuthority("USER")
+				.requestMatchers("/tickets/edit/**", "/tickets/create", "/tickets/delete/**").hasAnyAuthority("ADMIN")
+				.requestMatchers("/api/**", "/webjars/**", "/css/**","/error").permitAll().and().formLogin().loginPage("/")
+				.loginProcessingUrl("/").defaultSuccessUrl("/tickets", true).permitAll().and().logout().and()
 				.exceptionHandling();
 
 		return http.build();
