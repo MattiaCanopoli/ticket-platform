@@ -14,7 +14,7 @@
 		<h1 class="my-5 orange-text">ACME Support</h1>
 		<div sec:authorize="hasAuthority('ADMIN')" class="d-flex justify-content-end">
 			<button class="btn btn-primary mb-3 border border-1 border-light me-3">
-				<a class="text-reset text-decoration-none" th:href="@{/create}">New Ticket</a>
+				<a class="text-reset text-decoration-none" th:href="@{tickets/create}">New Ticket</a>
 			</button>
 		</div>
 		<!--redirect messages-->
@@ -57,11 +57,11 @@
 					<td>[[${ticket.formattedUpdatedAt}]]</td>
 					<td class="text-center">
 						<button class="btn btn-success border border-1 border-light btn-sm" th:href>
-							<a class="text-decoration-none text-reset" th:href="@{/{id}(id=${ticket.id})}">Details</a>
+							<a class="text-decoration-none text-reset" th:href="@{/tickets/show/{id}(id=${ticket.id})}">Details</a>
 						</button>
 						<button sec:authorize="hasAuthority('ADMIN')" class="btn btn-orange border border-1 border-light btn-sm">
 							<a class="text-decoration-none text-reset"
-								th:href="@{/edit/{id} (id=${ticket.id})}">Edit</a>
+								th:href="@{/tickets/edit/{id} (id=${ticket.id})}">Edit</a>
 						</button>
 						<!-- Button trigger modal -->
 						<button sec:authorize="hasAuthority('ADMIN')" type="button" class="btn btn-danger border border-1 border-light btn-sm"
@@ -70,32 +70,7 @@
 						</button>
 
 						<!-- Delete Modal -->
-						<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
-							aria-hidden="true">
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h1 class="modal-title fs-5 text-danger" id="deleteModalLabel">Delate ticket
-											[[${ticket.title}]]</h1>
-										<button type="button" class="btn-close" data-bs-dismiss="modal"
-											aria-label="Close"></button>
-									</div>
-									<div class="modal-body">
-										Deletion is a definitive action and cannot be reversed<br>
-										Are you sure you want to delete ticket [[${ticket.title}]]?
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary border border-1 border-light"
-											data-bs-dismiss="modal">Close</button>
-										<form method="post" th:action="@{/delete/{id} (id=${ticket.id})}">
-											<button class="btn btn-danger me-2 border border-1 border-light"
-												type="submit">Delete</button>
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>
-
+						<th:block th:replace="~{fragments/modals :: delete-modal}"></th:block>
 					</td>
 				</tr>
 			</tbody>
