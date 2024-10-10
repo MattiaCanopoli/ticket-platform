@@ -47,4 +47,8 @@ public class UserService {
 		return role;
 	}
 
+	public User save(User user) {
+		return uRepo.save(user);
+	}
+
 }
