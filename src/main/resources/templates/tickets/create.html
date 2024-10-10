@@ -19,7 +19,7 @@
 		<div class="row mb-5 justify-content-center">
 			<div th:if="${availableUsers.size() >0}" class="col-lg-8">
 				<!--form-->
-				<form method="post" th:object="${ticket}" th:action="@{/create}">
+				<form method="post" th:object="${ticket}" th:action="@{/tickets/create}">
 
 					<!--ticket status-->
 					<input type="hidden" name="status" id="status" value="1">
