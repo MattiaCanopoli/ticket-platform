@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.ticket.java.model.User;
 import com.ticket.java.service.TicketService;
 import com.ticket.java.service.UserService;
 
@@ -30,9 +32,17 @@ public class UserController {
 	}
 
 	@PostMapping("/changestatus/{id}")
-	public String changeUserStatus() {
-		System.out.println("test");
-		return "redirect:/tickets";
+	public String changeUserStatus(@PathVariable("id") Integer id, RedirectAttributes feedback) {
+
+		User user = uService.getById(id);
+		if (user.getOpenTickets() > 0) {
+			feedback.addFlashAttribute("dangerMessage", "Cannot chance status now, you still have open tickets");
+			return "redirect:/users/{id}";
+		}
+		user.setAvailable(true);
+		uService.save(user);
+		feedback.addFlashAttribute("successMessage", "Status successfully updated");
+		return "redirect:/users/{id}";
 	}
 
 }
