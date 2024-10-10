@@ -1,4 +1,4 @@
-package com.ticket.java.api;
+package com.ticket.java.controller.api;
 
 import java.util.List;
 
