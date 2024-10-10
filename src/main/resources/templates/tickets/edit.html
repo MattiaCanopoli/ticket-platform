@@ -16,10 +16,10 @@
 	</header>
 	<!--main-->
 	<main class="container">
-		<div class="row mb-5 justify-content-center">
-			<div class="col-lg-8">
+		<div class="row justify-content-center">
+			<div class="col-12 col-lg-8">
 				<!--form-->
-				<form method="post" th:object="${ticket}" th:action="@{/edit/{id} (id=${ticket.id})}">
+				<form method="post" th:object="${ticket}" th:action="@{/tickets/edit/{id} (id=${ticket.id})}">
 
 					<!--tiket-title-->
 					<div class="mb-3">
@@ -107,7 +107,7 @@
 						</div>
 					</div>
 					<!--ticket category-->
-					<div class="col-12">
+					<div class="col-12 mb-4">
 						<ul class="list-group" name="categories" id="categories" th:errorclass="is-invalid">
 							<li class="list-group-item" th:each="category : ${categories}">
 								<input class="form-check-input me-1" type="checkbox" th:field="*{categories}"
@@ -121,20 +121,18 @@
 							<li th:each="err: ${#fields.errors('categories')}" th:text="${err}"></li>
 						</ul>
 					</div>
-			</div>
 
-			<!--buttons section-->
-			<div class="d-flex justify-content-end">
-				<button class="btn btn-orange mx-2 border border-1 border-light" type="submit">Submit</button>
-				<button class="btn btn-secondary mx-2 border border-1 border-light" type="reset">Reset</button>
-			</div>
-			</form>
-		</div>
-		</div>
 
+					<!--buttons section-->
+
+					<div class="d-flex justify-content-end">
+						<button class="btn btn-orange mx-2 border border-1 border-light" type="submit">Submit</button>
+						<button class="btn btn-secondary mx-2 border border-1 border-light" type="reset">Reset</button>
+					</div>
+				</form>
+			</div>
+		</div>
 	</main>
-
-
 	<script th:replace="~{fragments/fragments :: scripts}"></script>
 </body>
 
