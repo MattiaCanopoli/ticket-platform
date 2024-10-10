@@ -43,7 +43,7 @@ public class TicketService {
 	}
 
 	public Ticket save(Ticket ticket) {
-		ticket.getUser().setAvailable(false);
+		// ticket.getUser().setAvailable(false);
 		return tRepo.save(ticket);
 	}
 
