@@ -12,23 +12,58 @@
 
 	<main class="container">
 		<div class="row justify-content-center mb-4" th:object="${currentUser}">
-			<div class="col-12 col-lg-8">
+			<div class="col-12 col-md-8">
 				<div
 					class="row py-2 mb-2 fs-6 text-center border border-primary rounded light-blue-background justify-content-between">
-					<div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
+					<div class="col-12 col-md-6">
 						<span class="fw-medium me-1">Name:</span>
 						<span class="fw-semibold fst-italic text-capitalize">[[*{name}]] [[*{lastname}]]</span>
 					</div>
 
-					<div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
+					<div class="col-12 col-md-6">
 						<span class="fw-medium me-1">Authorization:</span>
 						<span class="fw-semibold fst-italic me-1" th:each="role : *{roles}">[[${role.roleName}]]</span>
 					</div>
 				</div>
+
+				<div
+					class="row py-2 mb-2 fs-6 text-center border border-primary rounded light-blue-background justify-content-between align-items-center">
+					<div class="col-12 col-md-6">
+						<span class="fw-medium me-1">e-mail address:</span>
+						<span class="fw-semibold fst-italic">[[*{email}]]</span>
+					</div>
+
+					<div class="col-12 col-md-6">
+						<span class="fw-medium me-1">Current Status:</span>
+						<span class="fw-semibold fst-italic me-1"
+							th:classappend="*{available} ? 'text-success' : 'text-danger'"
+							th:text="*{available}? 'Available' : 'Not Available'"></span>
+							
+						<form method="post" th:action="@{/users/changestatus/{id} (id=*{id})}">
+							<button type="submit" class="btn btn-orange border border-light btn-sm">Change
+								Status
+							</button>
+						</form>
+
+					</div>
+				</div>
+				<div
+					class="row py-2 mb-2 fs-6 text-center border border-primary rounded light-blue-background justify-content-between align-items-center">
+					<div class="col-12 col-md-6">
+						<span class="fw-medium me-1">Open Tickets:</span>
+						<span class="fw-semibold fst-italic">[[*{openTickets}]]</span>
+					</div>
+
+					<div class="col-12 col-md-6">
+						<span class="fw-medium me-1">Closed Tickets:</span>
+						<span class="fw-semibold fst-italic">[[*{closedTickets}]]</span>
+					</div>
+				</div>
+
 			</div>
 		</div>
 
-		
+
 	</main>
 	<script th:replace="~{fragments/fragments :: scripts}"></script>
 </body>
