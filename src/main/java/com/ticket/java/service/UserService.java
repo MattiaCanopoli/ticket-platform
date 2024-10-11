@@ -1,12 +1,12 @@
 package com.ticket.java.service;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import com.ticket.java.model.Role;
 import com.ticket.java.model.User;
 import com.ticket.java.repository.UserRepository;
 
@@ -29,22 +29,41 @@ public class UserService {
 		return uRepo.findByUsername(username).get();
 	}
 
-	public List<User> findAvailable() {
-		return uRepo.findByAvailableTrue();
+	public List<User> findNonActive() {
+		return uRepo.findByActiveFalse();
 	}
 
-	public String getUserMainRole(Collection<? extends GrantedAuthority> roles) {
+//	public String getUserMainRole(Collection<? extends GrantedAuthority> roles) {
+//
+//		String role = "";
+//		for (GrantedAuthority gAuth : roles) {
+//			if (gAuth.getAuthority().equals("ADMIN")) {
+//				return role = "ADMIN";
+//
+//			} else if (gAuth.getAuthority().equals("USER")) {
+//				return role = "USER";
+//			}
+//		}
+//		return role;
+//	}
 
-		String role = "";
-		for (GrantedAuthority gAuth : roles) {
-			if (gAuth.getAuthority().equals("ADMIN")) {
-				return role = "ADMIN";
+	public List<String> getRolesNameByUsername(String username) {
+		User user = getByUsername(username);
+		List<String> roles = new ArrayList<String>();
 
-			} else if (gAuth.getAuthority().equals("USER")) {
-				return role = "USER";
-			}
+		for (Role role : user.getRoles()) {
+			roles.add(role.getRoleName());
 		}
-		return role;
+		return roles;
+	}
+
+	public boolean isAdmin(String username) {
+
+		List<String> roles = getRolesNameByUsername(username);
+		if (!roles.contains("ADMIN")) {
+			return false;
+		}
+		return true;
 	}
 
 	public User save(User user) {
