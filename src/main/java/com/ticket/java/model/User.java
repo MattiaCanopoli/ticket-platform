@@ -47,8 +47,8 @@ public class User {
 	private String password;
 
 	@NotNull
-	@Column(name = "available")
-	private boolean available;
+	@Column(name = "active")
+	private boolean active;
 
 	@Formula("(SELECT COUNT(ticket.id) FROM ticket WHERE (ticket.status_id=1 OR ticket.status_id=2) AND ticket.user_id=id)")
 	private Integer openTickets;
@@ -139,12 +139,12 @@ public class User {
 		this.username = username;
 	}
 
-	public boolean isAvailable() {
-		return available;
+	public boolean isActive() {
+		return active;
 	}
 
-	public void setAvailable(boolean available) {
-		this.available = available;
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public Set<Note> getNotes() {
