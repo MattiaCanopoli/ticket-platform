@@ -35,14 +35,55 @@ public class UserController {
 	public String changeUserStatus(@PathVariable("id") Integer id, RedirectAttributes feedback) {
 
 		User user = uService.getById(id);
-		if (user.getOpenTickets() > 0) {
-			feedback.addFlashAttribute("dangerMessage", "Cannot chance status now, you still have open tickets");
-			return "redirect:/users/{id}";
+		Boolean userStatus = user.isActive();
+		Integer openTickets = user.getOpenTickets();
+
+		// user is active (true) and has no open tickets -> status change to
+		// non-active(false)
+		if ((userStatus && openTickets == 0) || (!userStatus && openTickets > 0)) {
+			user.setActive(!userStatus);
+			uService.save(user);
+			feedback.addFlashAttribute("successMessage", "Status successfully updated");
 		}
-		user.setAvailable(true);
-		uService.save(user);
-		feedback.addFlashAttribute("successMessage", "Status successfully updated");
+
+		// user is active (true) and has open tickets -> cannot change status
+		if (userStatus && openTickets > 0) {
+			feedback.addFlashAttribute("dangerMessage", "Cannot change status now, you still have open tickets");
+		}
+
+		// user is non active (false) and doesn't have open tickets -> cannot change
+		// status
+		if (!userStatus && openTickets == 0) {
+			feedback.addFlashAttribute("dangerMessage", "Cannot change status now, you dont have any open ticket");
+		}
+		// user is non active (false) and doesn't have open tickets -> cannot change
+//		if (!userStatus && openTickets > 0) {
+//			user.setActive(true);
+//			uService.save(user);
+//			feedback.addFlashAttribute("successMessage", "Status successfully updated");
+//		}
+
+//
+//		if (user.isActive()) {
+//			user.setActive(false);
+//			feedback.addFlashAttribute("successMessage", "Status successfully updated");
+//		}
+//
+//		if (user.getOpenTickets() == 0 && !user.isActive()) {
+//			user.setActive(true);
+//			feedback.addFlashAttribute("successMessage", "Status successfully updated");
+//		}
+//
+//		if (user.getOpenTickets() > 0 && !user.isActive()) {
+//			feedback.addFlashAttribute("dangerMessage", "Cannot chance status now, you still have open tickets");
+//			return "redirect:/users/{id}";
+//		}
+//
+//		feedback.addFlashAttribute("successMessage", "Status successfully updated");
+//		user.setActive(true);
+//		uService.save(user);
 		return "redirect:/users/{id}";
+
 	}
 
 }
