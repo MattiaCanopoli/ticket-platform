@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ticket.java.model.Note;
@@ -52,19 +54,13 @@ public class TicketController {
 	public String index(Model model, @RequestParam(name = "title", required = false) String title,
 			Authentication auth) {
 
-		String role = uService.getUserMainRole(auth.getAuthorities());
-
 		List<Ticket> tickets = new ArrayList<Ticket>();
 
-		if (role.equals("ADMIN")) {
+		if (uService.isAdmin(auth.getName())) {
 			tickets = tService.findAll();
-		} else if (role.equals("USER")) {
+		} else {
 			Integer userId = uService.getByUsername(auth.getName()).getId();
 			tickets = tService.findUserTickets(userId);
-		}
-
-		if (role.equals("ADMIN") && (title != null && !title.isEmpty())) {
-			tickets = tService.findByTitle(title);
 		}
 
 		model.addAttribute("tickets", tickets);
@@ -76,12 +72,12 @@ public class TicketController {
 	public String show(@PathVariable("id") Integer id, Model model, Authentication auth, RedirectAttributes feedback) {
 
 		Ticket ticket = tService.getById(id);
-		String role = uService.getUserMainRole(auth.getAuthorities());
+		// List<String> roles = uService.getRolesNameByUsername(auth.getName());
 
-		if (role.equals("USER") && !(auth.getName().equals(ticket.getUser().getUsername()))) {
+		if (!uService.isAdmin(auth.getName()) && !(auth.getName().equals(ticket.getUser().getUsername()))) {
 
-			feedback.addFlashAttribute("dangerMessage", "Requested page cannot be accessed");
-			return "redirect:/";
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to see this ticket");
+
 		}
 
 		model.addAttribute("ticket", ticket);
@@ -99,7 +95,7 @@ public class TicketController {
 		model.addAttribute("ticket", new Ticket());
 		model.addAttribute("categories", cService.findAll());
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
-		model.addAttribute("availableUsers", uService.findAvailable());
+		model.addAttribute("availableUsers", uService.findNonActive());
 		return "/tickets/create";
 	}
 
@@ -112,7 +108,7 @@ public class TicketController {
 			// System.out.println(error.toString()));
 			model.addAttribute("categories", cService.findAll());
 			model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
-			model.addAttribute("availableUsers", uService.findAvailable());
+			model.addAttribute("availableUsers", uService.findNonActive());
 			return "/tickets/create";
 		}
 		tService.save(ticket);
@@ -128,7 +124,7 @@ public class TicketController {
 		model.addAttribute("categories", cService.findAll());
 		model.addAttribute("status", tsService.findAll());
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
-		model.addAttribute("availableUsers", uService.findAvailable());
+		model.addAttribute("availableUsers", uService.findAll());
 
 		return "/tickets/edit";
 	}
@@ -141,7 +137,7 @@ public class TicketController {
 			model.addAttribute("categories", cService.findAll());
 			model.addAttribute("status", tsService.findAll());
 			model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
-			model.addAttribute("availableUsers", uService.findAvailable());
+			model.addAttribute("availableUsers", uService.findAll());
 
 			return "/tickets/edit";
 		}
