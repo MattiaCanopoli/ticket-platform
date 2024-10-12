@@ -33,20 +33,6 @@ public class UserService {
 		return uRepo.findByActiveFalse();
 	}
 
-//	public String getUserMainRole(Collection<? extends GrantedAuthority> roles) {
-//
-//		String role = "";
-//		for (GrantedAuthority gAuth : roles) {
-//			if (gAuth.getAuthority().equals("ADMIN")) {
-//				return role = "ADMIN";
-//
-//			} else if (gAuth.getAuthority().equals("USER")) {
-//				return role = "USER";
-//			}
-//		}
-//		return role;
-//	}
-
 	public List<String> getRolesNameByUsername(String username) {
 		User user = getByUsername(username);
 		List<String> roles = new ArrayList<String>();
