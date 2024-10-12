@@ -50,7 +50,7 @@
 					</ul>
 
 					<div sec:authorize="hasAuthority('ADMIN')">
-						<form class="d-flex" role="search" th:action="@{/}">
+						<form class="d-flex" role="search" th:action="@{/tickets}">
 							<input class="form-control me-2" type="search" name="title" placeholder="Search by Title"
 								aria-label="Search">
 							<button class="btn btn-primary border border-1 border-light" type="submit">Search</button>
