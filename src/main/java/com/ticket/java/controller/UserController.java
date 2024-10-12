@@ -5,7 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ticket.java.model.User;
 import com.ticket.java.service.TicketService;
 import com.ticket.java.service.UserService;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/users")
@@ -36,7 +40,6 @@ public class UserController {
 		}
 
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
-		// model.addAttribute("tickets", tService.findUserTickets(id));
 		return "/users/user";
 	}
 
@@ -75,6 +78,28 @@ public class UserController {
 
 		return "redirect:/users/{id}";
 
+	}
+
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable("id") Integer id, Model model, Authentication auth) {
+
+		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
+		return "/users/edit";
+
+	}
+
+	@PostMapping("/edit/{id}")
+	public String update(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model,
+			RedirectAttributes feedback, Authentication auth) {
+
+		User currentUser = uService.getByUsername(auth.getName());
+
+		user.setPassword(currentUser.getPassword());
+		user.setRoles(currentUser.getRoles());
+
+		uService.save(user);
+
+		return "redirect:/users/{id}";
 	}
 
 }
