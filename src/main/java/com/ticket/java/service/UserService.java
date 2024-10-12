@@ -30,7 +30,16 @@ public class UserService {
 	}
 
 	public List<User> findNonActive() {
-		return uRepo.findByActiveFalse();
+		List<User> nonActive = uRepo.findByActiveFalse();
+
+		List<User> nonActiveOnlyUser = new ArrayList<>();
+		for (User user : nonActive) {
+			if (isUser(user.getUsername())) {
+				nonActiveOnlyUser.add(user);
+			}
+		}
+
+		return nonActiveOnlyUser;
 	}
 
 	public List<String> getRolesNameByUsername(String username) {
@@ -47,6 +56,15 @@ public class UserService {
 
 		List<String> roles = getRolesNameByUsername(username);
 		if (!roles.contains("ADMIN")) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean isUser(String username) {
+
+		List<String> roles = getRolesNameByUsername(username);
+		if (!roles.contains("USER")) {
 			return false;
 		}
 		return true;
