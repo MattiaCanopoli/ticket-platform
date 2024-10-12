@@ -29,10 +29,10 @@ public class UserService {
 		return uRepo.findByUsername(username).get();
 	}
 
-	public List<User> findNonActive() {
+	public List<User> findNonActiveUsers() {
 		List<User> nonActive = uRepo.findByActiveFalse();
 
-		List<User> nonActiveOnlyUser = new ArrayList<>();
+		List<User> nonActiveOnlyUser = new ArrayList<User>();
 		for (User user : nonActive) {
 			if (isUser(user.getUsername())) {
 				nonActiveOnlyUser.add(user);
@@ -72,6 +72,19 @@ public class UserService {
 
 	public User save(User user) {
 		return uRepo.save(user);
+	}
+
+	public List<User> findOnlyUsers() {
+		List<User> allUsers = uRepo.findAll();
+
+		List<User> onlyUsers = new ArrayList<User>();
+		for (User user : allUsers) {
+			if (isUser(user.getUsername())) {
+				onlyUsers.add(user);
+			}
+		}
+
+		return onlyUsers;
 	}
 
 }
