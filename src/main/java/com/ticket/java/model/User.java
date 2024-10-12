@@ -1,5 +1,6 @@
 package com.ticket.java.model;
 
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.annotations.Formula;
@@ -58,8 +59,7 @@ public class User {
 
 	@NotNull
 	@NotEmpty
-	@Column(name = "email")
-	// TODO inserire constraint per unique
+	@Column(name = "email", unique = true)
 	private String email;
 
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -67,11 +67,11 @@ public class User {
 
 	@OneToMany(mappedBy = "user")
 	@JsonBackReference
-	private Set<Ticket> tickets;
+	private List<Ticket> tickets;
 
 	@OneToMany(mappedBy = "author")
 	@JsonBackReference
-	private Set<Note> notes;
+	private List<Note> notes;
 
 	// getter & setter
 
@@ -115,11 +115,11 @@ public class User {
 		this.roles = roles;
 	}
 
-	public Set<Ticket> getTickets() {
+	public List<Ticket> getTickets() {
 		return tickets;
 	}
 
-	public void setTickets(Set<Ticket> tickets) {
+	public void setTickets(List<Ticket> tickets) {
 		this.tickets = tickets;
 	}
 
@@ -147,11 +147,11 @@ public class User {
 		this.active = active;
 	}
 
-	public Set<Note> getNotes() {
+	public List<Note> getNotes() {
 		return notes;
 	}
 
-	public void setNotes(Set<Note> notes) {
+	public void setNotes(List<Note> notes) {
 		this.notes = notes;
 	}
 
