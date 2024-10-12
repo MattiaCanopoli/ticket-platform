@@ -107,7 +107,7 @@ public class TicketController {
 		model.addAttribute("ticket", new Ticket());
 		model.addAttribute("categories", cService.findAll());
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
-		model.addAttribute("availableUsers", uService.findNonActive());
+		model.addAttribute("availableUsers", uService.findNonActiveUsers());
 		return "/tickets/create";
 	}
 
@@ -116,11 +116,9 @@ public class TicketController {
 			RedirectAttributes feedback, Authentication auth) {
 
 		if (bindingResult.hasErrors()) {
-			// bindingResult.getAllErrors().forEach(error ->
-			// System.out.println(error.toString()));
 			model.addAttribute("categories", cService.findAll());
 			model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
-			model.addAttribute("availableUsers", uService.findNonActive());
+			model.addAttribute("availableUsers", uService.findNonActiveUsers());
 			return "/tickets/create";
 		}
 		tService.save(ticket);
@@ -145,7 +143,7 @@ public class TicketController {
 		model.addAttribute("categories", cService.findAll());
 		model.addAttribute("status", tsService.findAll());
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
-		model.addAttribute("availableUsers", uService.findAll());
+		model.addAttribute("availableUsers", uService.findOnlyUsers());
 
 		return "/tickets/edit";
 	}
@@ -158,7 +156,7 @@ public class TicketController {
 			model.addAttribute("categories", cService.findAll());
 			model.addAttribute("status", tsService.findAll());
 			model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
-			model.addAttribute("availableUsers", uService.findAll());
+			model.addAttribute("availableUsers", uService.findOnlyUsers());
 
 			return "/tickets/edit";
 		}
