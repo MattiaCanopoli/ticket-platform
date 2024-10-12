@@ -52,6 +52,10 @@ public class User {
 	@Column(name = "password")
 	private String password;
 
+	private String address;
+
+	private String phone;
+
 	@NotNull
 	@Column(name = "is_active", columnDefinition = "BOOLEAN ")
 	private boolean active;
@@ -175,6 +179,22 @@ public class User {
 
 	public void setClosedTickets(Integer closedTickets) {
 		this.closedTickets = closedTickets;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 }
