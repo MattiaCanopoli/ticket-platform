@@ -23,6 +23,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Ticket {
@@ -33,6 +34,7 @@ public class Ticket {
 
 	@NotNull(message = "Title can not be empty")
 	@NotEmpty(message = "Title can not be empty")
+	@Size(max = 50)
 	@Column(name = "title", nullable = false)
 	private String title;
 
@@ -43,10 +45,11 @@ public class Ticket {
 
 	@NotNull(message = "Select a priority level")
 	@NotEmpty(message = "Select a priority level")
+	@Column(nullable = false)
 	private String priority;
 
 	@CreationTimestamp
-	@Column(name = "created_at", updatable = false)
+	@Column(name = "created_at", updatable = false, nullable = false)
 	private LocalDateTime createdAt;
 
 	@UpdateTimestamp
