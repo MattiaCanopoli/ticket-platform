@@ -16,8 +16,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class User {
@@ -28,11 +30,13 @@ public class User {
 
 	@NotNull
 	@NotEmpty
+	@Size(min = 2)
 	@Column(name = "name")
 	private String name;
 
 	@NotNull
 	@NotEmpty
+	@Size(min = 2)
 	@Column(name = "lastname")
 	private String lastname;
 
@@ -43,12 +47,13 @@ public class User {
 
 	@NotNull
 	@NotEmpty
-	@Column(name = "password")
+	@Size(min = 8, max = 24)
 	@JsonIgnore
+	@Column(name = "password")
 	private String password;
 
 	@NotNull
-	@Column(name = "active")
+	@Column(name = "is_active", columnDefinition = "BOOLEAN ")
 	private boolean active;
 
 	@Formula("(SELECT COUNT(ticket.id) FROM ticket WHERE (ticket.status_id=1 OR ticket.status_id=2) AND ticket.user_id=id)")
@@ -59,6 +64,7 @@ public class User {
 
 	@NotNull
 	@NotEmpty
+	@Email
 	@Column(name = "email", unique = true)
 	private String email;
 
