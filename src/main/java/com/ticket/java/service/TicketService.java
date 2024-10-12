@@ -1,6 +1,7 @@
 package com.ticket.java.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,8 +39,14 @@ public class TicketService {
 		return tRepo.findByUserId(userId);
 	}
 
-	public Ticket getById(Integer id) {
-		return tRepo.findById(id).get();
+	public Ticket getById(Integer id) throws Exception {
+		Optional<Ticket> ticket = tRepo.findById(id);
+
+		if (ticket.isPresent()) {
+			return ticket.get();
+		} else {
+			throw new Exception("Ticket with id " + id + " has not been found");
+		}
 	}
 
 	public Ticket save(Ticket ticket) {
