@@ -49,6 +49,12 @@ public class TicketService {
 		}
 	}
 
+	public String getTicketStatusName(Ticket ticket) {
+
+		System.out.println(ticket.getStatus().getName());
+		return ticket.getStatus().getName();
+	}
+
 	public Ticket save(Ticket ticket) {
 		// ticket.getUser().setAvailable(false);
 		return tRepo.save(ticket);
