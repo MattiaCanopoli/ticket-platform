@@ -195,7 +195,7 @@ public class TicketController {
 
 		if (bindingResult.hasErrors()) {
 			feedback.addFlashAttribute("dangerMessage",
-					"Status for ticket \"" + ticket.getTitle() + "\" cannot be empty");
+					"Status for ticket \"" + ticket.getTitle() + "\" can't be empty");
 			return "redirect:/tickets/show/{id}";
 		}
 
