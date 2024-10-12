@@ -57,7 +57,12 @@ public class TicketController {
 		List<Ticket> tickets = new ArrayList<Ticket>();
 
 		if (uService.isAdmin(auth.getName())) {
-			tickets = tService.findAll();
+
+			if (title != null && !title.isEmpty()) {
+				tickets = tService.findByTitle(title);
+			} else {
+				tickets = tService.findAll();
+			}
 		} else {
 			Integer userId = uService.getByUsername(auth.getName()).getId();
 			tickets = tService.findUserTickets(userId);
@@ -69,9 +74,16 @@ public class TicketController {
 	}
 
 	@GetMapping("/show/{id}")
-	public String show(@PathVariable("id") Integer id, Model model, Authentication auth, RedirectAttributes feedback) {
+	public String show(@PathVariable("id") Integer id, Model model, Authentication auth, RedirectAttributes feedback)
+			throws Exception {
 
-		Ticket ticket = tService.getById(id);
+		Ticket ticket = null;
+		try {
+			ticket = tService.getById(id);
+		} catch (Exception e) {
+
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
 		// List<String> roles = uService.getRolesNameByUsername(auth.getName());
 
 		if (!uService.isAdmin(auth.getName()) && !(auth.getName().equals(ticket.getUser().getUsername()))) {
@@ -120,7 +132,16 @@ public class TicketController {
 
 	@GetMapping("/edit/{id}")
 	public String edit(@PathVariable("id") Integer id, Model model, Authentication auth) {
-		model.addAttribute("ticket", tService.getById(id));
+
+		Ticket ticket = null;
+		try {
+			ticket = tService.getById(id);
+		} catch (Exception e) {
+
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
+
+		model.addAttribute("ticket", ticket);
 		model.addAttribute("categories", cService.findAll());
 		model.addAttribute("status", tsService.findAll());
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
@@ -153,7 +174,15 @@ public class TicketController {
 	public String addNote(@ModelAttribute("note") Note newNote, Model model, @PathVariable("ticketId") Integer ticketId,
 			Authentication auth) {
 
-		newNote.setTicket(tService.getById(ticketId));
+		Ticket ticket = null;
+		try {
+			ticket = tService.getById(ticketId);
+		} catch (Exception e) {
+
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
+
+		newNote.setTicket(ticket);
 		newNote.getTicket().setUpdatedAt(LocalDateTime.now());
 		newNote.setAuthor(uService.getByUsername(auth.getName()));
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
