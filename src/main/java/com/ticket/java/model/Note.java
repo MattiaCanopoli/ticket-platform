@@ -31,7 +31,7 @@ public class Note {
 	private String content;
 
 	@ManyToOne
-	@JoinColumn(name = "author", nullable = false)
+	@JoinColumn(name = "user_id", nullable = false)
 	private User author;
 
 	@ManyToOne
