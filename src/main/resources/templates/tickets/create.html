@@ -88,7 +88,7 @@
 					</div>
 					<div class="row mb-3 gy-2">
 						<!--ticket category-->
-						<div class="col-12">
+						<div class="col-12"><label for="categories" class="form-label">Categories</label>
 							<ul class="list-group" name="categories" id="categories" th:errorclass="is-invalid">
 								<li class="list-group-item" th:each="category : ${categories}">
 									<input class="form-check-input me-1" type="checkbox" th:field="*{categories}"
