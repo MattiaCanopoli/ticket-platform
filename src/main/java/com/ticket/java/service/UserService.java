@@ -14,7 +14,7 @@ import com.ticket.java.repository.UserRepository;
 public class UserService {
 
 	@Autowired
-	UserRepository uRepo;
+	private UserRepository uRepo;
 
 	public List<User> findAll() {
 		List<User> users = uRepo.findAll();
@@ -29,6 +29,11 @@ public class UserService {
 		return uRepo.findByUsername(username).get();
 	}
 
+	/**
+	 * create a List of user with authority "USER" and active=false
+	 * 
+	 * @return List of User
+	 */
 	public List<User> findNonActiveUsers() {
 		List<User> nonActive = uRepo.findByActiveFalse();
 
@@ -42,6 +47,12 @@ public class UserService {
 		return nonActiveOnlyUser;
 	}
 
+	/**
+	 * return a list of roles for the given username
+	 * 
+	 * @param username
+	 * @return
+	 */
 	public List<String> getRolesNameByUsername(String username) {
 		User user = getByUsername(username);
 		List<String> roles = new ArrayList<String>();
@@ -52,6 +63,12 @@ public class UserService {
 		return roles;
 	}
 
+	/**
+	 * verify if given user, passed via username, has role "ADMIN"
+	 * 
+	 * @param username
+	 * @return boolean
+	 */
 	public boolean isAdmin(String username) {
 
 		List<String> roles = getRolesNameByUsername(username);
@@ -61,6 +78,12 @@ public class UserService {
 		return true;
 	}
 
+	/**
+	 * verify if given user, passed via username, has role "USER"
+	 * 
+	 * @param username
+	 * @return boolean
+	 */
 	public boolean isUser(String username) {
 
 		List<String> roles = getRolesNameByUsername(username);
@@ -74,6 +97,11 @@ public class UserService {
 		return uRepo.save(user);
 	}
 
+	/**
+	 * return a List of User with "USER" authority
+	 * 
+	 * @return
+	 */
 	public List<User> findOnlyUsers() {
 		List<User> allUsers = uRepo.findAll();
 

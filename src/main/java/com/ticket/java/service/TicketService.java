@@ -13,7 +13,7 @@ import com.ticket.java.repository.TicketRepository;
 public class TicketService {
 
 	@Autowired
-	TicketRepository tRepo;
+	private TicketRepository tRepo;
 
 	public List<Ticket> findAll() {
 		List<Ticket> tickets = tRepo.findAll();
@@ -39,6 +39,13 @@ public class TicketService {
 		return tRepo.findByUserId(userId);
 	}
 
+	/**
+	 * check if ticket with id "id" is present. throws exception if not found
+	 * 
+	 * @param id
+	 * @return ticket with id "id"
+	 * @throws Exception
+	 */
 	public Ticket getById(Integer id) throws Exception {
 		Optional<Ticket> ticket = tRepo.findById(id);
 
@@ -49,14 +56,18 @@ public class TicketService {
 		}
 	}
 
+	/**
+	 * get status name of a given ticket
+	 * 
+	 * @param ticket
+	 * @return String: status name
+	 */
 	public String getTicketStatusName(Ticket ticket) {
-
 		System.out.println(ticket.getStatus().getName());
 		return ticket.getStatus().getName();
 	}
 
 	public Ticket save(Ticket ticket) {
-		// ticket.getUser().setAvailable(false);
 		return tRepo.save(ticket);
 	}
 

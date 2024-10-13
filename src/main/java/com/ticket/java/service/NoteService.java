@@ -12,7 +12,7 @@ import com.ticket.java.repository.NoteRepository;
 public class NoteService {
 
 	@Autowired
-	NoteRepository nRepo;
+	private NoteRepository nRepo;
 
 	public List<Note> findAll() {
 		return nRepo.findAll();

@@ -12,7 +12,7 @@ import com.ticket.java.repository.CategoryRepository;
 public class CategoryService {
 
 	@Autowired
-	CategoryRepository cRepo;
+	private CategoryRepository cRepo;
 
 	public List<Category> findAll() {
 		return cRepo.findAll();

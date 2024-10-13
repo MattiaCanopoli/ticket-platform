@@ -5,9 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,18 +16,25 @@ import com.ticket.java.model.User;
 import com.ticket.java.service.TicketService;
 import com.ticket.java.service.UserService;
 
-import jakarta.validation.Valid;
-
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
 	@Autowired
-	UserService uService;
+	private UserService uService;
 
 	@Autowired
-	TicketService tService;
+	private TicketService tService;
 
+	/**
+	 * Shows user personal page. throws exception in a user tries to access personal
+	 * page of a different user (PathVariable id != authenticated user id)
+	 * 
+	 * @param model
+	 * @param id
+	 * @param auth
+	 * @return
+	 */
 	@GetMapping("/{id}")
 	public String userPage(Model model, @PathVariable("id") Integer id, Authentication auth) {
 
@@ -40,9 +45,17 @@ public class UserController {
 		}
 
 		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
-		return "/users/user";
+		return "/users/show";
 	}
 
+	/**
+	 * Allow user to change active value if conditions are matched
+	 * 
+	 * @param id
+	 * @param feedback
+	 * @param auth
+	 * @return
+	 */
 	@PostMapping("/changestatus/{id}")
 	public String changeUserStatus(@PathVariable("id") Integer id, RedirectAttributes feedback, Authentication auth) {
 
@@ -52,13 +65,12 @@ public class UserController {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed here");
 		}
 
-		User user = uService.getById(id);
+		User user = uService.getById(currentUserId);
 		Boolean userStatus = user.isActive();
 		Integer openTickets = user.getOpenTickets();
 
 		// user is active (true) and has no open tickets OR user is non active (false)
-		// and has open tickets -> status change to
-		// non-active(false)
+		// and has open tickets -> status changed
 		if ((userStatus && openTickets == 0) || (!userStatus && openTickets > 0)) {
 			user.setActive(!userStatus);
 			uService.save(user);
@@ -78,28 +90,6 @@ public class UserController {
 
 		return "redirect:/users/{id}";
 
-	}
-
-	@GetMapping("/edit/{id}")
-	public String edit(@PathVariable("id") Integer id, Model model, Authentication auth) {
-
-		model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
-		return "/users/edit";
-
-	}
-
-	@PostMapping("/edit/{id}")
-	public String update(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model,
-			RedirectAttributes feedback, Authentication auth) {
-
-		User currentUser = uService.getByUsername(auth.getName());
-
-		user.setPassword(currentUser.getPassword());
-		user.setRoles(currentUser.getRoles());
-
-		uService.save(user);
-
-		return "redirect:/users/{id}";
 	}
 
 }

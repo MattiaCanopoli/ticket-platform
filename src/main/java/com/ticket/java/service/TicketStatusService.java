@@ -12,7 +12,7 @@ import com.ticket.java.repository.TicketStatusRepository;
 public class TicketStatusService {
 
 	@Autowired
-	TicketStatusRepository tsRepo;
+	private TicketStatusRepository tsRepo;
 
 	public List<TicketStatus> findAll() {
 		return tsRepo.findAll();

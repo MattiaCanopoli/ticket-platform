@@ -34,22 +34,31 @@ import jakarta.validation.Valid;
 public class TicketController {
 
 	@Autowired
-	TicketService tService;
+	private TicketService tService;
 
 	@Autowired
-	UserService uService;
+	private UserService uService;
 
 	@Autowired
-	CategoryService cService;
+	private CategoryService cService;
 
 	@Autowired
-	TicketStatusService tsService;
+	private TicketStatusService tsService;
 
 	@Autowired
-	NoteService nService;
+	private NoteService nService;
 
 	// READ
 
+	/**
+	 * shows ticket list, different by authority: ADMIN: all tickes/filtered by
+	 * title if requested; USER: only user ticket
+	 * 
+	 * @param model
+	 * @param title
+	 * @param auth
+	 * @return String, path to index.html
+	 */
 	@GetMapping
 	public String index(Model model, @RequestParam(name = "title", required = false) String title,
 			Authentication auth) {
@@ -73,6 +82,17 @@ public class TicketController {
 		return "tickets/index";
 	}
 
+	/**
+	 * shows ticket with id "id"
+	 * 
+	 * @param id
+	 * @param model
+	 * @param auth
+	 * @param feedback
+	 * @return String. path to show.html
+	 * @throws Exception NOT_FOUND: ticket with requested id is not present;
+	 *                   FORBIDDEN a user not owner of the ticket try to access
+	 */
 	@GetMapping("/show/{id}")
 	public String show(@PathVariable("id") Integer id, Model model, Authentication auth, RedirectAttributes feedback)
 			throws Exception {
@@ -84,7 +104,6 @@ public class TicketController {
 
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
-		// List<String> roles = uService.getRolesNameByUsername(auth.getName());
 
 		if (!uService.isAdmin(auth.getName()) && !(auth.getName().equals(ticket.getUser().getUsername()))) {
 
@@ -102,6 +121,14 @@ public class TicketController {
 
 	// CREATE
 
+	/**
+	 * Shows ticket creation form. availableUsers list all users with "USER" role
+	 * and active=false
+	 * 
+	 * @param model
+	 * @param auth
+	 * @return path to create.html
+	 */
 	@GetMapping("/create")
 	public String create(Model model, Authentication auth) {
 		model.addAttribute("ticket", new Ticket());
@@ -111,6 +138,18 @@ public class TicketController {
 		return "/tickets/create";
 	}
 
+	/**
+	 * validate fields and save ticket into database and redirect to index and
+	 * display success message. if validation fails, return create form with error
+	 * messages.
+	 * 
+	 * @param ticket
+	 * @param bindingResult
+	 * @param model
+	 * @param feedback
+	 * @param auth
+	 * @return
+	 */
 	@PostMapping("/create")
 	public String store(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model,
 			RedirectAttributes feedback, Authentication auth) {
@@ -128,6 +167,15 @@ public class TicketController {
 
 	// EDIT
 
+	/**
+	 * shows ticket edit form, with prepopulated fields. availableUser list all
+	 * users with "USER" authority
+	 * 
+	 * @param id
+	 * @param model
+	 * @param auth
+	 * @return
+	 */
 	@GetMapping("/edit/{id}")
 	public String edit(@PathVariable("id") Integer id, Model model, Authentication auth) {
 
@@ -148,6 +196,17 @@ public class TicketController {
 		return "/tickets/edit";
 	}
 
+	/**
+	 * validate fields and update ticket, then redirect to show page ad display a
+	 * message. if validation fails, return edit page with errors
+	 * 
+	 * @param ticket
+	 * @param bindingResult
+	 * @param model
+	 * @param feedback
+	 * @param auth
+	 * @return
+	 */
 	@PostMapping("/edit/{id}")
 	public String update(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model,
 			RedirectAttributes feedback, Authentication auth) {
@@ -168,6 +227,16 @@ public class TicketController {
 
 	// NOTE
 
+	/**
+	 * checks if ticket exist or throw ResponseStatusException with 404 status. add
+	 * note in relation to ticket. ticket updatedAt is set
+	 * 
+	 * @param newNote
+	 * @param model
+	 * @param ticketId
+	 * @param auth
+	 * @return
+	 */
 	@PostMapping("/note/{ticketId}")
 	public String addNote(@ModelAttribute("note") Note newNote, Model model, @PathVariable("ticketId") Integer ticketId,
 			Authentication auth) {
@@ -189,6 +258,16 @@ public class TicketController {
 		return "redirect:/tickets/show/{ticketId}";
 	}
 
+	/**
+	 * validate entry and updates ticket status. if validation fails, redirect to
+	 * show with error message dangerMessage
+	 * 
+	 * @param ticket
+	 * @param bindingResult
+	 * @param model
+	 * @param feedback
+	 * @return
+	 */
 	@PostMapping("/statusupdate/{id}")
 	public String statusUpdate(@Valid @ModelAttribute("ticket") Ticket ticket, BindingResult bindingResult, Model model,
 			RedirectAttributes feedback) {
@@ -209,6 +288,13 @@ public class TicketController {
 
 	// DELETE
 
+	/**
+	 * delete ticket by id. redirect to index and display confirmation message
+	 * 
+	 * @param id
+	 * @param feedback
+	 * @return
+	 */
 	@PostMapping("/delete/{id}")
 	public String delete(@PathVariable("id") Integer id, RedirectAttributes feedback) {
 		tService.destroy(id);

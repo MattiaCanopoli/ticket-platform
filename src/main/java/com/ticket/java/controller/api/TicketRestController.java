@@ -20,7 +20,7 @@ import com.ticket.java.service.TicketService;
 public class TicketRestController {
 
 	@Autowired
-	TicketService tService;
+	private TicketService tService;
 
 	@GetMapping
 	public ResponseEntity<List<Ticket>> index(@RequestParam(name = "category", required = false) String category,
