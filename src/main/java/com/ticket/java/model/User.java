@@ -52,17 +52,20 @@ public class User {
 	@Column(name = "password")
 	private String password;
 
-	private String address;
-
-	private String phone;
-
 	@NotNull
-	@Column(name = "is_active", columnDefinition = "BOOLEAN ")
+	@Column(name = "is_active", columnDefinition = "BOOLEAN")
 	private boolean active;
 
+	/**
+	 * Counts all the ticket assigned to a User, with status 1 (OPEN) or 2 (IN
+	 * PROGRESS)
+	 */
 	@Formula("(SELECT COUNT(ticket.id) FROM ticket WHERE (ticket.status_id=1 OR ticket.status_id=2) AND ticket.user_id=id)")
 	private Integer openTickets;
 
+	/**
+	 * Counts all the ticket assigned to a User, with status 3 (COMPLETED)
+	 */
 	@Formula("(SELECT COUNT(ticket.id) FROM ticket WHERE ticket.status_id=3 AND ticket.user_id=id)")
 	private Integer closedTickets;
 
@@ -179,22 +182,6 @@ public class User {
 
 	public void setClosedTickets(Integer closedTickets) {
 		this.closedTickets = closedTickets;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
 	}
 
 }
