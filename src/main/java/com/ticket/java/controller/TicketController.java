@@ -238,7 +238,7 @@ public class TicketController {
 	 * @return
 	 */
 	@PostMapping("/note/{ticketId}")
-	public String addNote(@ModelAttribute("note") Note newNote, Model model, @PathVariable("ticketId") Integer ticketId,
+	public String addNote(@Valid @ModelAttribute("note") Note newNote,BindingResult bindingResult, Model model, @PathVariable("ticketId") Integer ticketId,
 			Authentication auth) {
 
 		Ticket ticket = null;
@@ -247,6 +247,14 @@ public class TicketController {
 		} catch (Exception e) {
 
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
+		
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("ticket", ticket);
+			model.addAttribute("status", tsService.findAll());
+			model.addAttribute("currentUser", uService.getByUsername(auth.getName()));
+
+			return "tickets/show";
 		}
 
 		newNote.setTicket(ticket);
