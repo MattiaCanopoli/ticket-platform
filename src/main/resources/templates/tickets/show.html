@@ -128,8 +128,8 @@
 					<div class="collapse" id="collapseExample">
 						<form method="post" th:action="@{/tickets/note/{ticketId} (ticketId=${ticket.id})}">
 
-							<div class="mb-3">
-								<label for="note-content" class="form-label">New note</label>
+							<div class="my-3">
+								
 								<textarea class="form-control" id="note-content" th:field="${note.content}"
 									rows="5"></textarea>
 							</div>
